@@ -16,8 +16,29 @@ const Contact = () => {
       toast({ title: "Please fill in all fields.", variant: "destructive" });
       return;
     }
-    toast({ title: "Message sent!", description: "Thank you for reaching out." });
-    setForm({ name: "", email: "", message: "" });
+    const endpoint = import.meta.env.VITE_FORMSPREE_ENDPOINT;
+    if (endpoint) {
+      const data = new FormData();
+      data.append("name", form.name);
+      data.append("email", form.email);
+      data.append("message", form.message);
+
+      fetch(endpoint, { method: "POST", body: data })
+        .then((res) => {
+          if (res.ok) {
+            toast({ title: "Message sent!", description: "Thank you for reaching out." });
+            setForm({ name: "", email: "", message: "" });
+          } else {
+            toast({ title: "Submission failed.", description: "Please try again later.", variant: "destructive" });
+          }
+        })
+        .catch(() => {
+          toast({ title: "Submission failed.", description: "Please check your connection.", variant: "destructive" });
+        });
+    } else {
+      toast({ title: "Message sent!", description: "(Local demo) Configure VITE_FORMSPREE_ENDPOINT to enable live submissions." });
+      setForm({ name: "", email: "", message: "" });
+    }
   };
 
   return (
@@ -99,13 +120,13 @@ const Contact = () => {
             </div>
 
             <div className="flex gap-4 pt-4">
-              <a href="https://linkedin.com/in/kingman-jou" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors">
+              <a href="https://linkedin.com/in/kingman-jou" target="_blank" rel="noopener noreferrer" title="LinkedIn" aria-label="Visit LinkedIn" className="text-muted-foreground hover:text-primary transition-colors">
                 <Linkedin className="h-6 w-6" />
               </a>
-              <a href="https://github.com/kingman8888" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors">
+              <a href="https://github.com/kingman8888" target="_blank" rel="noopener noreferrer" title="GitHub" aria-label="Visit GitHub" className="text-muted-foreground hover:text-primary transition-colors">
                 <Github className="h-6 w-6" />
               </a>
-              <a href="https://t.me/SmartAnswerAi_bot" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors">
+              <a href="https://t.me/SmartAnswerAi_bot" target="_blank" rel="noopener noreferrer" title="Telegram" aria-label="Visit Telegram" className="text-muted-foreground hover:text-primary transition-colors">
                 <Send className="h-6 w-6" />
               </a>
             </div>

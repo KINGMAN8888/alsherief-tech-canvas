@@ -22,7 +22,7 @@ const About = () => {
           <div className="flex justify-center">
             <div className="hex-clip h-72 w-72 bg-muted flex items-center justify-center">
               <img
-                src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face"
+                src="/assets/CVP.png"
                 alt="Youssef AlSherief"
                 className="hex-clip h-full w-full object-cover"
                 loading="lazy"

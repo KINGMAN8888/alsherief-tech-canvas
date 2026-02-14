@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { posts } from "@/data/posts";
 import Navbar from "@/components/Navbar";
+import { Helmet } from "react-helmet-async";
 
 const BlogPost = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -33,6 +34,14 @@ const BlogPost = () => {
 
   return (
     <main className="min-h-screen bg-background">
+      <Helmet>
+        <title>{post.title} — Youssef AlSherief</title>
+        <meta name="description" content={post.excerpt || post.title} />
+        <meta property="og:title" content={`${post.title} — Youssef AlSherief`} />
+        <meta property="og:description" content={post.excerpt || post.title} />
+        <meta property="og:type" content="article" />
+        <meta property="og:image" content="/assets/CVP.png" />
+      </Helmet>
       <Navbar />
       <article className="mx-auto max-w-3xl px-4 pb-24 pt-28 md:px-8">
         <motion.div

@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { projects } from "@/data/projects";
 import Navbar from "@/components/Navbar";
+import { Helmet } from "react-helmet-async";
 
 const ProjectDetail = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -33,6 +34,14 @@ const ProjectDetail = () => {
 
   return (
     <main className="min-h-screen bg-background">
+      <Helmet>
+        <title>{project.title} — Project — Youssef AlSherief</title>
+        <meta name="description" content={project.description || project.longDescription?.slice(0, 160)} />
+        <meta property="og:title" content={`${project.title} — Youssef AlSherief`} />
+        <meta property="og:description" content={project.description || project.longDescription?.slice(0, 160)} />
+        <meta property="og:type" content="website" />
+        <meta property="og:image" content="/assets/CVP.png" />
+      </Helmet>
       <Navbar />
       <div className="mx-auto max-w-4xl px-4 pb-24 pt-28 md:px-8">
         <motion.div
