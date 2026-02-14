@@ -2,17 +2,26 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Cpu, Menu, X, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useLocation } from "react-router-dom";
+import ThemeToggle from "@/components/ThemeToggle";
 
 const navLinks = [
   { label: "About", href: "#about" },
   { label: "Services", href: "#services" },
   { label: "Experience", href: "#experience" },
   { label: "Projects", href: "#projects" },
+  { label: "Blog", href: "#blog" },
   { label: "Contact", href: "#contact" },
 ];
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
+  const location = useLocation();
+
+  const getHref = (hash: string) => {
+    if (location.pathname === "/") return hash;
+    return `/${hash}`;
+  };
 
   return (
     <motion.nav
@@ -23,7 +32,7 @@ const Navbar = () => {
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 md:px-8">
         {/* Logo */}
-        <a href="#" className="flex items-center gap-2 font-rajdhani text-xl font-bold text-foreground">
+        <a href={location.pathname === "/" ? "#" : "/"} className="flex items-center gap-2 font-rajdhani text-xl font-bold text-foreground">
           <Cpu className="h-6 w-6 text-primary" />
           <span>Youssef AlSherief</span>
         </a>
@@ -33,12 +42,13 @@ const Navbar = () => {
           {navLinks.map((l) => (
             <a
               key={l.href}
-              href={l.href}
+              href={getHref(l.href)}
               className="font-cairo text-sm text-muted-foreground transition-colors hover:text-primary"
             >
               {l.label}
             </a>
           ))}
+          <ThemeToggle />
           <Button size="sm" className="gap-2 bg-primary text-primary-foreground hover:bg-primary/90">
             <Download className="h-4 w-4" />
             Download CV
@@ -61,13 +71,17 @@ const Navbar = () => {
           {navLinks.map((l) => (
             <a
               key={l.href}
-              href={l.href}
+              href={getHref(l.href)}
               onClick={() => setOpen(false)}
               className="font-cairo text-muted-foreground transition-colors hover:text-primary"
             >
               {l.label}
             </a>
           ))}
+          <div className="flex items-center gap-3">
+            <ThemeToggle />
+            <span className="font-cairo text-sm text-muted-foreground">Toggle Theme</span>
+          </div>
           <Button size="sm" className="w-full gap-2">
             <Download className="h-4 w-4" />
             Download CV

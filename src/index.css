@@ -3,7 +3,50 @@
 @tailwind utilities;
 
 @layer base {
+  /* Light theme */
   :root {
+    --background: 210 20% 96%;
+    --foreground: 222 47% 11%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+
+    --primary: 199 89% 48%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 46 63% 51%;
+    --secondary-foreground: 222 47% 7%;
+
+    --muted: 210 20% 90%;
+    --muted-foreground: 215 16% 40%;
+
+    --accent: 199 89% 48%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214 20% 84%;
+    --input: 214 20% 84%;
+    --ring: 199 89% 48%;
+
+    --radius: 0.75rem;
+
+    --sidebar-background: 210 20% 96%;
+    --sidebar-foreground: 222 47% 11%;
+    --sidebar-primary: 199 89% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 210 20% 90%;
+    --sidebar-accent-foreground: 222 47% 11%;
+    --sidebar-border: 214 20% 84%;
+    --sidebar-ring: 199 89% 48%;
+  }
+
+  /* Dark theme */
+  .dark {
     --background: 222 47% 7%;
     --foreground: 210 40% 96%;
 
@@ -31,8 +74,6 @@
     --border: 222 30% 18%;
     --input: 222 30% 18%;
     --ring: 199 89% 60%;
-
-    --radius: 0.75rem;
 
     --sidebar-background: 222 47% 7%;
     --sidebar-foreground: 210 40% 96%;
@@ -66,14 +107,26 @@
 
 /* Glassmorphism utility */
 .glass {
-  background: hsla(222, 47%, 10%, 0.6);
-  backdrop-filter: blur(16px);
+  background: hsla(0, 0%, 100%, 0.7);
   -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  border: 1px solid hsla(214, 20%, 84%, 0.5);
+}
+
+.dark .glass {
+  background: hsla(222, 47%, 10%, 0.6);
   border: 1px solid hsla(222, 30%, 24%, 0.4);
 }
 
 /* Circuit grid background */
 .circuit-grid {
+  background-image:
+    linear-gradient(hsla(199, 89%, 48%, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, hsla(199, 89%, 48%, 0.06) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+.dark .circuit-grid {
   background-image:
     linear-gradient(hsla(199, 89%, 60%, 0.04) 1px, transparent 1px),
     linear-gradient(90deg, hsla(199, 89%, 60%, 0.04) 1px, transparent 1px);
@@ -82,10 +135,18 @@
 
 /* Glow effect */
 .glow-blue {
+  box-shadow: 0 0 20px hsla(199, 89%, 48%, 0.1), 0 0 40px hsla(199, 89%, 48%, 0.03);
+}
+
+.dark .glow-blue {
   box-shadow: 0 0 20px hsla(199, 89%, 60%, 0.15), 0 0 40px hsla(199, 89%, 60%, 0.05);
 }
 
 .glow-blue-hover:hover {
+  box-shadow: 0 0 25px hsla(199, 89%, 48%, 0.2), 0 0 50px hsla(199, 89%, 48%, 0.06);
+}
+
+.dark .glow-blue-hover:hover {
   box-shadow: 0 0 25px hsla(199, 89%, 60%, 0.3), 0 0 50px hsla(199, 89%, 60%, 0.1);
 }
 

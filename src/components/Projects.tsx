@@ -1,55 +1,9 @@
 import { motion } from "framer-motion";
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, ArrowRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-
-interface Project {
-  emoji: string;
-  title: string;
-  description: string;
-  tech: string[];
-  link?: string;
-}
-
-const projects: Project[] = [
-  {
-    emoji: "🖥️",
-    title: "PC Master Platform",
-    description:
-      "A comprehensive e-commerce platform for PC builds with AI-powered build suggestion assistant, 3D compatibility simulation, and inventory management.",
-    tech: ["MERN Stack", "JWT Auth", "AI Integration"],
-    link: "https://pc-master-files.onrender.com",
-  },
-  {
-    emoji: "🤖",
-    title: "Smart Answer AI Bot",
-    description:
-      "A Telegram service bot for Arab students and expatriates in Russia — instant translation, CV writing, academic support, and logistics.",
-    tech: ["Python", "Telegram API", "NLP"],
-    link: "https://t.me/SmartAnswerAi_bot",
-  },
-  {
-    emoji: "✅",
-    title: "Dom Dash Do",
-    description: "A modern, fast to-do application with intuitive UX.",
-    tech: ["React", "TypeScript", "Tailwind CSS", "Local Storage"],
-    link: "https://dom-dash-do.lovable.app",
-  },
-  {
-    emoji: "🌐",
-    title: "Al-Tawasul Platform",
-    description:
-      "A social networking application with a chat and interaction system.",
-    tech: ["Docker", "Prisma", "VPS Hosting"],
-  },
-  {
-    emoji: "🐍",
-    title: "Python Hub Platform",
-    description:
-      "An educational platform for programming students, including tests and a payment gateway.",
-    tech: ["Python", "Web", "Payments"],
-  },
-];
+import { Link } from "react-router-dom";
+import { projects } from "@/data/projects";
 
 const Projects = () => {
   return (
@@ -96,14 +50,22 @@ const Projects = () => {
                   </Badge>
                 ))}
               </div>
-              {p.link && (
-                <Button asChild variant="ghost" size="sm" className="w-fit gap-1 text-primary hover:text-primary/80">
-                  <a href={p.link} target="_blank" rel="noopener noreferrer">
-                    <ExternalLink className="h-3.5 w-3.5" />
-                    Live Demo
-                  </a>
+              <div className="flex items-center gap-2">
+                <Button asChild variant="ghost" size="sm" className="gap-1 text-primary hover:text-primary/80">
+                  <Link to={`/projects/${p.slug}`}>
+                    View Details
+                    <ArrowRight className="h-3.5 w-3.5" />
+                  </Link>
                 </Button>
-              )}
+                {p.link && (
+                  <Button asChild variant="ghost" size="sm" className="gap-1 text-primary hover:text-primary/80">
+                    <a href={p.link} target="_blank" rel="noopener noreferrer">
+                      <ExternalLink className="h-3.5 w-3.5" />
+                      Live Demo
+                    </a>
+                  </Button>
+                )}
+              </div>
             </motion.div>
           ))}
         </div>
