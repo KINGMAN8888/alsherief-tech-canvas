@@ -1,0 +1,370 @@
+{
+  "nav": {
+    "about": "About",
+    "services": "Services",
+    "experience": "Experience",
+    "projects": "Projects",
+    "education": "Education",
+    "certs": "Certs",
+    "skills": "Skills",
+    "blog": "Blog",
+    "contact": "Contact",
+    "downloadCv": "Download CV",
+    "navigation": "Navigation",
+    "closeMenu": "Close menu",
+    "available": "Available for opportunities",
+    "name": "Youssef AlSherief",
+    "role": "Computer Engineer",
+    "language": "Language"
+  },
+  "hero": {
+    "nameFirst": "Youssef",
+    "nameLast": "AlSherief",
+    "roles": ["Full-Stack Developer", "AI Engineer", "Cloud Architect", "Computer Engineer", "System Administrator"],
+    "tagline": "Engineering The Future",
+    "descriptionPart1": "From",
+    "descriptionCyan": "server assembly",
+    "descriptionMid": "to",
+    "descriptionViolet": "AI-powered applications",
+    "descriptionEnd": "— delivering end-to-end solutions across the entire technology stack with precision and scale.",
+    "stats": {
+      "yearsExp": "Years Exp.",
+      "projects": "Projects",
+      "technologies": "Technologies",
+      "countries": "Countries"
+    },
+    "viewProjects": "View Projects",
+    "contactMe": "Contact Me"
+  },
+  "about": {
+    "label": "About Me",
+    "title": "Who I Am",
+    "subtitle": "A Computer Engineer bridging the physical and digital worlds — from server room to cloud infrastructure.",
+    "bio1": "I'm Youssef AlSherief (Youssef Mahmoud Saber), a Computer Engineer & Full-Stack Developer with a passion for building systems that matter.",
+    "bio2": "My journey began six years ago in the depths of hardware maintenance — soldering PCBs, assembling servers, and configuring enterprise networks. That hands-on foundation gave me a deep understanding of how systems work at the physical level, which directly informs how I architect software today.",
+    "bio3": "Currently studying Computer Engineering at AlSewedy University of Technology (Egypt), having completed a foundational year at Ural Federal University in Russia — an experience that expanded both my technical and cultural horizons.",
+    "bio4": "I focus on clean architecture, layered security, and automated CI/CD pipelines — always building with production and scale in mind."
+  },
+  "services": {
+    "label": "Services",
+    "title": "What I Offer",
+    "subtitle": "A versatile toolkit spanning hardware, software, cloud, and security — covering the full technology lifecycle.",
+    "sectionLabel": "What I Do",
+    "sectionTitle": "The Hybrid Skillset",
+    "sectionSubtitle": "A rare combination of hardware knowledge and software expertise — delivering complete, production-ready solutions from infrastructure to interface.",
+    "items": [
+      { "title": "Full-Stack Web Development", "badge": "MERN Stack", "description": "Building scalable web applications from database design to pixel-perfect front-end with React, Node.js, and MongoDB." },
+      { "title": "Mobile App Development", "badge": "Flutter & Dart", "description": "Cross-platform iOS & Android apps with native performance, smooth animations, and clean architecture." },
+      { "title": "Network Infrastructure", "badge": "Management & Security", "description": "Enterprise-grade network design, Cisco routing & switching, VLAN segmentation, and firewall policy management." },
+      { "title": "Cloud Services", "badge": "AWS & Azure", "description": "Cloud provisioning, serverless architectures, Docker containerization, and CI/CD pipeline automation." },
+      { "title": "Cybersecurity", "badge": "Ethical Hacking & Consulting", "description": "Penetration testing, vulnerability assessments, security audits, and layered defense strategies for organizations." },
+      { "title": "Digital Marketing", "badge": "Brand Identity Strategy", "description": "Data-driven campaigns, SEO optimization, and brand identity design that converts visitors into loyal customers." },
+      { "title": "Technical Support", "badge": "Advanced Corporate Solutions", "description": "End-to-end IT department management, hardware troubleshooting, and enterprise-level helpdesk solutions." }
+    ],
+    "cards": [
+      {
+        "title": "Software Development",
+        "sub": "Full-Stack & Mobile",
+        "features": ["MERN Stack (MongoDB, Express, React, Node.js)", "Flutter cross-platform mobile apps", "REST API & GraphQL design", "UI/UX implementation & responsive design"],
+        "tags": ["React", "Node.js", "Flutter", "MongoDB", "TypeScript"]
+      },
+      {
+        "title": "Hardware & Networking",
+        "sub": "Infrastructure & Systems",
+        "features": ["Server assembly, BIOS & RAID configuration", "Cisco routing & switching (CCNA-level)", "Network security & firewall management", "IT department management & support"],
+        "tags": ["Cisco", "Linux", "Windows Server", "TCP/IP", "VLANs"]
+      },
+      {
+        "title": "Cloud & DevOps",
+        "sub": "Deploy, Scale & Automate",
+        "features": ["AWS & Azure cloud provisioning", "Docker containerization & orchestration", "CI/CD pipelines (GitHub Actions)", "VPS management & Nginx reverse proxy"],
+        "tags": ["AWS", "Azure", "Docker", "GitHub Actions", "Nginx"]
+      },
+      {
+        "title": "AI & Automation",
+        "sub": "Intelligent Solutions",
+        "features": ["Telegram & Discord bot development", "Web scraping & data extraction pipelines", "Workflow automation & scheduling", "LLM integration & AI-powered assistants"],
+        "tags": ["Python", "OpenAI", "Selenium", "n8n", "Telegram API"]
+      }
+    ]
+  },
+  "experience": {
+    "label": "Career Timeline",
+    "title": "Professional Experience",
+    "jobs": [
+      {
+        "role": "IT Manager",
+        "company": "Tawasol Bila Hudood Tourism Company",
+        "location": "Makkah",
+        "period": "2024 — Present",
+        "bullets": [
+          "Full ownership of all technical operations: infrastructure, servers, and internal networks.",
+          "Directing website development, digital marketing campaigns, and advertising strategies.",
+          "Managing IT security policies and ensuring compliance with data protection standards."
+        ]
+      },
+      {
+        "role": "Assembly & Maintenance Technician",
+        "company": "Badr Group",
+        "location": "",
+        "period": "2023 — 2024",
+        "bullets": [
+          "Assembled high-performance PCs for gaming rigs and heavy-duty workstations.",
+          "Diagnosed and repaired motherboard-level faults and electronic circuitry.",
+          "Conducted BIOS configuration, RAID setup, and thermal management optimizations."
+        ]
+      },
+      {
+        "role": "IT & Digital Marketing Manager",
+        "company": "The Global View Restaurant — Clock Tower",
+        "location": "Makkah",
+        "period": "Jan 2022 — Mar 2023",
+        "bullets": [
+          "Managed POS systems, internal networks, and the restaurant's cloud infrastructure.",
+          "Designed and executed digital marketing campaigns across all social platforms.",
+          "Created logos, print materials, and brand identity visuals for promotional use."
+        ]
+      },
+      {
+        "role": "IT & Social Media Manager",
+        "company": "Asia Oasis Tourism Company",
+        "location": "Makkah (Remote)",
+        "period": "2022 — 2023",
+        "bullets": [
+          "Managed technical systems, website maintenance, and server administration remotely.",
+          "Provided enterprise-level technical support and resolved infrastructure incidents.",
+          "Developed and published digital content across social media channels."
+        ]
+      },
+      {
+        "role": "Freelance Developer & Designer",
+        "company": "Upwork / Fiverr / Mostaql",
+        "location": "",
+        "period": "2018 — Present",
+        "bullets": [
+          "Delivered 30+ projects including full-stack web apps, mobile apps, and automation scripts.",
+          "Designed brand identities, logos, and marketing materials for international clients.",
+          "Provided ongoing technical support, network setup, and system maintenance services."
+        ]
+      }
+    ]
+  },
+  "education": {
+    "label": "Learning & Credentials",
+    "title": "Education & Certifications",
+    "degrees": [
+      { "degree": "B.Sc. Computer Engineering", "institution": "AlSewedy University of Technology", "location": "Egypt", "period": "2025 — 2028" },
+      { "degree": "Preparatory Year — Engineering & Technology", "institution": "Ural Federal University", "location": "Russia", "period": "2024 — 2025" },
+      { "degree": "Computer Diploma", "institution": "Smart School for Computers", "location": "", "period": "2021 — 2023" }
+    ],
+    "languagesTitle": "Languages",
+    "languages": ["Arabic (Native)", "English (Advanced)", "Russian (Intermediate)"],
+    "certsTitle": "Professional Certifications",
+    "certGroups": [
+      { "category": "Networking", "items": ["Cisco CCNA", "Cisco CCNP", "CompTIA Network+"] },
+      { "category": "Hardware & Maintenance", "items": ["CompTIA A+"] },
+      { "category": "Cloud", "items": ["Microsoft Azure Administrator", "Azure Fundamentals (AZ-900)", "AWS Cloud Fundamentals"] },
+      { "category": "Programming & AI", "items": ["NVIDIA CUDA C/C++ — Deep Learning Institute", "Foundational C# — Microsoft & freeCodeCamp", "IoT & Embedded Systems — UC Irvine", "Materials Science — UC Davis"] },
+      { "category": "Cybersecurity", "items": ["Cybersecurity Awareness — HP LIFE"] },
+      { "category": "Marketing & Design", "items": ["Social Media Advertising — Meta", "Social Media Marketing — AlqadasiBiz", "Design Internship — Canva"] }
+    ]
+  },
+  "certifications": {
+    "label": "Credentials",
+    "title": "Certificate Gallery",
+    "description": "A collection of certifications earned across cloud, programming, cybersecurity, and design disciplines.",
+    "items": [
+      { "title": "Foundation Year — Engineering & Technology", "issuer": "Ural Federal University", "category": "Education" },
+      { "title": "Azure Administrator Associate", "issuer": "Microsoft", "category": "Cloud" },
+      { "title": "Foundational C# with Microsoft", "issuer": "Microsoft & freeCodeCamp", "category": "Programming" },
+      { "title": "Accelerated Computing with CUDA C/C++", "issuer": "NVIDIA Deep Learning Institute", "category": "Programming & AI" },
+      { "title": "IoT & Embedded Systems", "issuer": "UC Irvine", "category": "Programming" },
+      { "title": "Materials Science for Engineers", "issuer": "UC Davis", "category": "Engineering" },
+      { "title": "Introduction to Cybersecurity Awareness", "issuer": "HP LIFE", "category": "Cybersecurity" },
+      { "title": "Social Media Advertising Fundamentals", "issuer": "Meta", "category": "Marketing" },
+      { "title": "Social Media Marketing", "issuer": "AlqadasiBiz", "category": "Marketing" },
+      { "title": "Design Internship Program", "issuer": "Canva", "category": "Design" }
+    ]
+  },
+  "skills": {
+    "label": "Tech Stack",
+    "title": "Technical Skills",
+    "description": "A broad and deep technology foundation — spanning software, infrastructure, and hardware domains.",
+    "groups": [
+      { "category": "Languages", "sub": "Core & Scripting", "items": ["Python", "JavaScript (ES6+)", "TypeScript", "C++", "C#", "Dart", "PHP", "SQL"] },
+      { "category": "Frontend", "sub": "UI & Web", "items": ["React.js", "Next.js", "HTML5", "CSS3", "Tailwind CSS", "Bootstrap"] },
+      { "category": "Mobile", "sub": "Cross-Platform", "items": ["Flutter", "Dart", "Android", "iOS"] },
+      { "category": "Backend", "sub": "APIs & Services", "items": ["Node.js", "Express.js", "Prisma ORM", "REST API", "GraphQL"] },
+      { "category": "Databases", "sub": "Storage & Queries", "items": ["MongoDB", "MySQL", "PostgreSQL", "Redis"] },
+      { "category": "DevOps & Tools", "sub": "CI/CD & Infrastructure", "items": ["Git / GitHub", "Docker", "Linux", "Nginx", "GitHub Actions", "Postman"] },
+      { "category": "Hardware", "sub": "Systems & Networking", "items": ["PCB Microsoldering", "PC Assembly", "Network Cabling", "BIOS / RAID", "Cisco"] }
+    ]
+  },
+  "projects": {
+    "label": "Portfolio",
+    "title": "Featured Projects",
+    "description": "A selection of projects that showcase my full-stack capabilities across web, mobile, AI, and infrastructure.",
+    "viewDetails": "View Details",
+    "liveDemo": "Live Demo",
+    "viewLiveDemo": "View Live Demo",
+    "sourceCode": "Source Code",
+    "viewSourceCode": "View Source Code",
+    "backToProjects": "Back to Projects",
+    "backToHome": "Back to Home",
+    "notFound": "Project Not Found",
+    "overview": "Overview",
+    "keyFeatures": "Key Features",
+    "challengesSolutions": "Challenges & Solutions",
+    "techStack": "Tech Stack",
+    "allProjects": "All Projects",
+    "items": {
+      "pc-master": {
+        "title": "PC Master Platform",
+        "description": "A comprehensive e-commerce platform for PC builds with AI-powered build suggestion assistant, 3D compatibility simulation, and inventory management.",
+        "longDescription": "PC Master is a full-featured e-commerce platform designed specifically for PC enthusiasts and builders. The platform provides an AI-powered build suggestion assistant that recommends compatible components based on user requirements such as budget, use case (gaming, workstation, content creation), and performance expectations. It includes a 3D compatibility simulation engine that visually verifies component fit before purchase, reducing return rates significantly. The inventory management system tracks stock levels in real-time across multiple suppliers.",
+        "features": ["AI-powered PC build recommendation engine", "3D component compatibility visualization", "Real-time inventory tracking across suppliers", "Secure user authentication with JWT tokens", "Shopping cart with saved builds feature", "Admin dashboard for product and order management", "Responsive design for mobile and desktop"],
+        "challenges": "The biggest challenge was building the AI recommendation engine that could account for component compatibility, power requirements, and thermal constraints simultaneously. Implementing real-time price tracking across multiple suppliers also required careful API rate limiting and caching strategies.",
+        "techDetails": "Built with MongoDB for flexible product schemas, Express.js REST API, React frontend with Redux state management, and Node.js backend. JWT authentication secures user sessions. The AI engine uses a rule-based system combined with collaborative filtering to generate build recommendations."
+      },
+      "smart-answer-ai": {
+        "title": "Smart Answer AI Bot",
+        "description": "A Telegram service bot for Arab students and expatriates in Russia — instant translation, CV writing, academic support, and logistics.",
+        "longDescription": "Smart Answer AI Bot is a comprehensive Telegram-based service designed to assist Arab students and expatriates living in Russia. The bot provides instant Arabic-Russian-English translation, automated CV and cover letter generation tailored to the Russian job market, academic support including document translation and university application guidance, and logistics assistance for navigating daily life in Russia. The bot serves hundreds of active users and processes thousands of requests monthly.",
+        "features": ["Multi-language translation (Arabic, Russian, English)", "AI-powered CV and cover letter generation", "Academic document translation and formatting", "University application guidance and support", "Daily logistics assistance (navigation, services)", "Natural language understanding for context-aware responses", "24/7 automated availability"],
+        "challenges": "Handling the nuances of Arabic-Russian translation was a significant challenge, especially with technical and academic terminology. Building a reliable NLP pipeline that could understand mixed-language queries (users often combine Arabic and Russian in a single message) required extensive training data and custom preprocessing.",
+        "techDetails": "Built with Python using the python-telegram-bot library. NLP processing leverages custom-trained models for language detection and intent classification. The translation engine combines API services with custom dictionaries for domain-specific terminology. Deployed on a VPS with automated monitoring and restart capabilities."
+      },
+      "dom-dash-do": {
+        "title": "Dom Dash Do",
+        "description": "A modern, fast to-do application with intuitive UX.",
+        "longDescription": "Dom Dash Do is a sleek, modern task management application built with a focus on speed and user experience. The app features an intuitive drag-and-drop interface for organizing tasks, priority levels with color coding, due date tracking with smart reminders, and category-based organization. All data is stored locally in the browser using Local Storage, ensuring privacy and instant access without server dependencies.",
+        "features": ["Drag-and-drop task reordering", "Priority levels with color-coded indicators", "Due date tracking and overdue alerts", "Category and tag-based organization", "Local Storage persistence for privacy", "Dark and light theme support", "Keyboard shortcuts for power users"],
+        "challenges": "Implementing smooth drag-and-drop functionality with proper state management while keeping the app performant was the main challenge. Ensuring data persistence with Local Storage while handling edge cases like storage limits and data migration between versions required careful planning.",
+        "techDetails": "Built with React and TypeScript for type safety. Tailwind CSS provides the styling system with custom theme configuration. State management uses React hooks with context for global state. Local Storage is used for persistence with a migration system for schema changes."
+      },
+      "al-tawasul": {
+        "title": "Al-Tawasul Platform",
+        "description": "A social networking application with a chat and interaction system.",
+        "longDescription": "Al-Tawasul is a social networking platform designed for community interaction and real-time communication. The platform features a comprehensive chat system with support for direct messages, group chats, and broadcast channels. Users can create profiles, share posts, comment, and interact through a familiar social media interface. The platform is containerized with Docker for consistent deployments and uses Prisma ORM for type-safe database operations.",
+        "features": ["Real-time messaging with WebSocket support", "User profiles with customizable avatars", "Post creation with text, images, and links", "Comment and reaction system", "Group chat and broadcast channels", "User search and friend request system", "Admin moderation tools"],
+        "challenges": "Building a reliable real-time messaging system that scales with concurrent users was the primary challenge. Managing WebSocket connections, handling message delivery guarantees, and implementing proper connection recovery required extensive testing and optimization.",
+        "techDetails": "Containerized with Docker for deployment consistency. Prisma ORM provides type-safe database access with PostgreSQL. The real-time messaging layer uses WebSockets with fallback to long polling. Deployed on a VPS with Nginx reverse proxy and SSL termination."
+      },
+      "python-hub": {
+        "title": "Python Hub Platform",
+        "description": "An educational platform for programming students, including tests and a payment gateway.",
+        "longDescription": "Python Hub is an educational platform designed to teach programming through structured courses, interactive coding exercises, and assessments. The platform includes a built-in code editor for practice, automated test grading, progress tracking, and a payment gateway for premium course access. Students can follow curated learning paths from beginner to advanced Python programming, with each module including video lessons, reading materials, and hands-on projects.",
+        "features": ["Structured learning paths from beginner to advanced", "Interactive code editor with real-time execution", "Automated test grading and feedback", "Progress tracking and achievement badges", "Payment gateway for premium courses", "Certificate generation upon course completion", "Discussion forums for student interaction"],
+        "challenges": "Implementing a secure code execution environment that prevents malicious code while providing a smooth user experience was critical. Integrating the payment gateway with proper handling of subscriptions, refunds, and regional payment methods required careful attention to security and compliance.",
+        "techDetails": "Built with Python using Django framework for the backend. The code execution sandbox uses containerized environments for security. Payment processing integrates with multiple gateways for regional support. The frontend uses modern JavaScript with server-side rendering for SEO."
+      }
+    }
+  },
+  "blog": {
+    "label": "Blog",
+    "title": "Latest Articles",
+    "description": "Insights and guides from my experience in software engineering, cloud architecture, and AI.",
+    "featured": "Featured",
+    "readArticle": "Read Article",
+    "read": "Read",
+    "backToBlog": "Back to Blog",
+    "notFound": "Article Not Found",
+    "previous": "Previous",
+    "next": "Next",
+    "allArticles": "All Articles",
+    "author": "Youssef AlSherief",
+    "authorRole": "Full-Stack Engineer",
+    "minRead": "min read",
+    "items": {
+      "building-ai-telegram-bots-python": {
+        "title": "Building AI-Powered Telegram Bots with Python",
+        "summary": "A practical guide to creating intelligent Telegram bots using Python, covering everything from basic setup to NLP integration and deployment strategies.",
+        "category": "AI & Automation",
+        "content": [
+          "Telegram bots have become an essential tool for automating services and providing instant support to users. In this article, I share my experience building Smart Answer AI Bot, a Telegram service that assists Arab students in Russia with translation, CV writing, and academic support.",
+          "Getting started with Telegram bot development is straightforward. The python-telegram-bot library provides a clean, Pythonic interface for the Telegram Bot API. After creating your bot through BotFather and obtaining your API token, you can have a basic bot responding to commands in under 20 lines of code.",
+          "The real power comes when you integrate Natural Language Processing. Instead of relying solely on predefined commands, NLP allows your bot to understand user intent from natural language messages. For Smart Answer AI Bot, I implemented a custom intent classification system that detects whether a user needs translation, document assistance, or general information.",
+          "One of the biggest challenges I faced was handling multilingual input. Users often mix Arabic and Russian in the same message, which breaks most standard NLP pipelines. The solution was to build a custom language detection layer that identifies language segments within a single message and processes them accordingly.",
+          "For deployment, I recommend using a VPS with systemd service management. This ensures your bot restarts automatically after crashes and starts on system boot. Docker containers add another layer of reliability by isolating dependencies and making deployments reproducible.",
+          "Key takeaways: Start with a clear use case and user persona. Build incrementally, starting with basic command handlers before adding AI features. Always implement proper error handling and logging, as debugging issues in production bots can be challenging without good observability."
+        ]
+      },
+      "hardware-to-cloud-fullstack-journey": {
+        "title": "From Hardware to Cloud: My Journey in Full-Stack Engineering",
+        "summary": "How understanding hardware fundamentals, from PCB microsoldering to server assembly, made me a better software engineer and cloud architect.",
+        "category": "Cloud & DevOps",
+        "content": [
+          "Most software developers never touch the hardware their code runs on. I took the opposite path, starting with hardware assembly, network cabling, and PCB microsoldering before writing my first line of production code. This unconventional journey gave me a unique perspective that continues to influence how I architect software systems.",
+          "Understanding hardware constraints changes how you think about software performance. When you have physically assembled servers, configured RAID arrays, and measured thermal output, you develop an intuitive sense for resource utilization that no amount of cloud dashboard monitoring can replace.",
+          "My transition from hardware to software began with networking. Configuring Cisco routers and switches taught me about protocols, packet routing, and network security at a fundamental level. This knowledge proved invaluable when I later started building distributed systems and microservices architectures.",
+          "The cloud was the natural bridge between my hardware and software skills. Services like AWS EC2 and Azure VMs abstract away physical hardware, but understanding what is underneath helps you make better decisions about instance types, storage configurations, and network topologies.",
+          "Docker was a game-changer in my workflow. Coming from a hardware background where reproducibility means following exact assembly procedures, containerization felt like bringing that same discipline to software deployment. Every dependency is documented, every environment is reproducible.",
+          "My advice to aspiring full-stack engineers: do not be afraid to go deep into areas outside your comfort zone. Understanding the full stack, from physical hardware to cloud infrastructure to application code, gives you a problem-solving toolkit that specialists often lack."
+        ]
+      },
+      "production-vps-docker-setup": {
+        "title": "Setting Up a Production VPS with Docker",
+        "summary": "A step-by-step guide to configuring a secure, production-ready VPS with Docker, Nginx reverse proxy, SSL certificates, and automated deployments.",
+        "category": "DevOps",
+        "content": [
+          "Setting up a production VPS might seem daunting, but with the right approach it becomes a repeatable process. In this guide, I walk through the complete setup I use for deploying web applications, from initial server hardening to automated container deployments.",
+          "Start with server security. Disable root SSH login, configure key-based authentication, set up a firewall with UFW (allow only ports 22, 80, and 443), and install fail2ban to prevent brute-force attacks. These steps take 15 minutes but prevent the vast majority of common attacks.",
+          "Docker installation on Ubuntu is straightforward through the official repository. I recommend using Docker Compose for multi-container applications. Define your services, networks, and volumes in a docker-compose.yml file, and your entire application stack becomes portable and version-controlled.",
+          "Nginx serves as the reverse proxy, routing incoming requests to the appropriate Docker containers. The key configuration involves setting up upstream blocks for each service and configuring proper proxy headers. This setup also enables you to run multiple applications on a single VPS.",
+          "SSL certificates are non-negotiable for production. Certbot with the Nginx plugin automates Let's Encrypt certificate provisioning and renewal. A single command sets up HTTPS for your domain, and a cron job handles automatic renewal before expiration.",
+          "For automated deployments, I use a simple webhook-based approach. A lightweight webhook server listens for push events from GitHub, pulls the latest code, rebuilds Docker images, and restarts containers. This provides a basic CI/CD pipeline without the complexity of dedicated tools.",
+          "Monitoring is the final piece. I set up basic monitoring with a combination of Docker health checks, log aggregation to a central file, and simple uptime monitoring that sends alerts via Telegram. For most small to medium applications, this provides sufficient observability without the overhead of full monitoring stacks."
+        ]
+      }
+    }
+  },
+  "contact": {
+    "label": "Get In Touch",
+    "title": "Contact Me",
+    "description": "Have a project in mind or want to discuss a collaboration? Feel free to reach out.",
+    "sendMessage": "Send a Message",
+    "fullName": "Full Name",
+    "email": "Email Address",
+    "subject": "Subject",
+    "message": "Message",
+    "required": "*",
+    "namePlaceholder": "John Doe",
+    "emailPlaceholder": "john@example.com",
+    "subjectPlaceholder": "Project Collaboration",
+    "messagePlaceholder": "Tell me about your project or idea...",
+    "send": "Send Message",
+    "sending": "Sending...",
+    "errorRequired": "Please fill in all required fields.",
+    "successTitle": "Message sent!",
+    "successMsg": "Thank you for reaching out. I'll get back to you soon.",
+    "errorTitle": "Submission failed.",
+    "errorMsg": "Please try again later.",
+    "emailLabel": "Email",
+    "phoneLabel": "Phone",
+    "locationLabel": "Location",
+    "location": "Egypt, 10th of Ramadan City",
+    "connectWith": "Connect with me",
+    "availableBadge": "Available for opportunities",
+    "availableMsg": "Currently open to freelance projects and full-time opportunities."
+  },
+  "footer": {
+    "bio": "Full-Stack Developer & Computer Engineer combining hardware expertise with AI-powered software solutions.",
+    "quickLinks": "Quick Links",
+    "getInTouch": "Get In Touch",
+    "location": "Egypt / Makkah, Saudi Arabia",
+    "backToTop": "Back to Top",
+    "copyright": "© {{year}} Youssef AlSherief. All rights reserved.",
+    "builtWith": "Built with",
+    "usingStack": "using React, TypeScript & Tailwind CSS",
+    "visitSocial": "Visit"
+  },
+  "pages": {
+    "homeTitle": "Youssef AlSherief — Tech Hybrid Portfolio",
+    "homeDescription": "Youssef AlSherief — Computer Engineer & Full-Stack Developer combining hardware engineering with AI-powered software solutions.",
+    "notFoundTitle": "Page Not Found | Youssef AlSherief",
+    "notFoundDescription": "The page you are looking for does not exist.",
+    "notFound404": "404",
+    "notFoundMsg": "Oops! Page not found",
+    "returnHome": "Return to Home"
+  }
+}

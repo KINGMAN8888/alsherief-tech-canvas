@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+
+  <!-- ═══════════════════════════════════════
+       HOME PAGES  (3 locales)
+  ═══════════════════════════════════════ -->
+
+  <url>
+    <loc>https://youssefalsherief.tech/en</loc>
+    <lastmod>2026-02-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://youssefalsherief.tech/en"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://youssefalsherief.tech/ar"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://youssefalsherief.tech/ru"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://youssefalsherief.tech/en"/>
+  </url>
+
+  <url>
+    <loc>https://youssefalsherief.tech/ar</loc>
+    <lastmod>2026-02-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://youssefalsherief.tech/en"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://youssefalsherief.tech/ar"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://youssefalsherief.tech/ru"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://youssefalsherief.tech/en"/>
+  </url>
+
+  <url>
+    <loc>https://youssefalsherief.tech/ru</loc>
+    <lastmod>2026-02-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://youssefalsherief.tech/en"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://youssefalsherief.tech/ar"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://youssefalsherief.tech/ru"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://youssefalsherief.tech/en"/>
+  </url>
+
+  <!-- ═══════════════════════════════════════
+       PROJECT PAGES
+  ═══════════════════════════════════════ -->
+
+  <!-- pc-master -->
+  <url>
+    <loc>https://youssefalsherief.tech/en/projects/pc-master</loc>
+    <lastmod>2026-02-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://youssefalsherief.tech/en/projects/pc-master"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://youssefalsherief.tech/ar/projects/pc-master"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://youssefalsherief.tech/ru/projects/pc-master"/>
+  </url>
+  <url>
+    <loc>https://youssefalsherief.tech/ar/projects/pc-master</loc>
+    <lastmod>2026-02-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://youssefalsherief.tech/en/projects/pc-master"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://youssefalsherief.tech/ar/projects/pc-master"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://youssefalsherief.tech/ru/projects/pc-master"/>
+  </url>
+  <url>
+    <loc>https://youssefalsherief.tech/ru/projects/pc-master</loc>
+    <lastmod>2026-02-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://youssefalsherief.tech/en/projects/pc-master"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://youssefalsherief.tech/ar/projects/pc-master"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://youssefalsherief.tech/ru/projects/pc-master"/>
+  </url>
+
+  <!-- smart-answer-ai -->
+  <url>
+    <loc>https://youssefalsherief.tech/en/projects/smart-answer-ai</loc>
+    <lastmod>2026-02-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://youssefalsherief.tech/en/projects/smart-answer-ai"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://youssefalsherief.tech/ar/projects/smart-answer-ai"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://youssefalsherief.tech/ru/projects/smart-answer-ai"/>
+  </url>
+  <url>
+    <loc>https://youssefalsherief.tech/ar/projects/smart-answer-ai</loc>
+    <lastmod>2026-02-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://youssefalsherief.tech/en/projects/smart-answer-ai"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://youssefalsherief.tech/ar/projects/smart-answer-ai"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://youssefalsherief.tech/ru/projects/smart-answer-ai"/>
+  </url>
+  <url>
+    <loc>https://youssefalsherief.tech/ru/projects/smart-answer-ai</loc>
+    <lastmod>2026-02-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://youssefalsherief.tech/en/projects/smart-answer-ai"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://youssefalsherief.tech/ar/projects/smart-answer-ai"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://youssefalsherief.tech/ru/projects/smart-answer-ai"/>
+  </url>
+
+  <!-- dom-dash-do -->
+  <url>
+    <loc>https://youssefalsherief.tech/en/projects/dom-dash-do</loc>
+    <lastmod>2026-02-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://youssefalsherief.tech/en/projects/dom-dash-do"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://youssefalsherief.tech/ar/projects/dom-dash-do"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://youssefalsherief.tech/ru/projects/dom-dash-do"/>
+  </url>
+  <url>
+    <loc>https://youssefalsherief.tech/ar/projects/dom-dash-do</loc>
+    <lastmod>2026-02-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://youssefalsherief.tech/en/projects/dom-dash-do"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://youssefalsherief.tech/ar/projects/dom-dash-do"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://youssefalsherief.tech/ru/projects/dom-dash-do"/>
+  </url>
+  <url>
+    <loc>https://youssefalsherief.tech/ru/projects/dom-dash-do</loc>
+    <lastmod>2026-02-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://youssefalsherief.tech/en/projects/dom-dash-do"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://youssefalsherief.tech/ar/projects/dom-dash-do"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://youssefalsherief.tech/ru/projects/dom-dash-do"/>
+  </url>
+
+  <!-- al-tawasul -->
+  <url>
+    <loc>https://youssefalsherief.tech/en/projects/al-tawasul</loc>
+    <lastmod>2026-02-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://youssefalsherief.tech/en/projects/al-tawasul"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://youssefalsherief.tech/ar/projects/al-tawasul"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://youssefalsherief.tech/ru/projects/al-tawasul"/>
+  </url>
+  <url>
+    <loc>https://youssefalsherief.tech/ar/projects/al-tawasul</loc>
+    <lastmod>2026-02-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://youssefalsherief.tech/en/projects/al-tawasul"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://youssefalsherief.tech/ar/projects/al-tawasul"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://youssefalsherief.tech/ru/projects/al-tawasul"/>
+  </url>
+  <url>
+    <loc>https://youssefalsherief.tech/ru/projects/al-tawasul</loc>
+    <lastmod>2026-02-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://youssefalsherief.tech/en/projects/al-tawasul"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://youssefalsherief.tech/ar/projects/al-tawasul"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://youssefalsherief.tech/ru/projects/al-tawasul"/>
+  </url>
+
+  <!-- python-hub -->
+  <url>
+    <loc>https://youssefalsherief.tech/en/projects/python-hub</loc>
+    <lastmod>2026-02-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://youssefalsherief.tech/en/projects/python-hub"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://youssefalsherief.tech/ar/projects/python-hub"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://youssefalsherief.tech/ru/projects/python-hub"/>
+  </url>
+  <url>
+    <loc>https://youssefalsherief.tech/ar/projects/python-hub</loc>
+    <lastmod>2026-02-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://youssefalsherief.tech/en/projects/python-hub"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://youssefalsherief.tech/ar/projects/python-hub"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://youssefalsherief.tech/ru/projects/python-hub"/>
+  </url>
+  <url>
+    <loc>https://youssefalsherief.tech/ru/projects/python-hub</loc>
+    <lastmod>2026-02-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://youssefalsherief.tech/en/projects/python-hub"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://youssefalsherief.tech/ar/projects/python-hub"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://youssefalsherief.tech/ru/projects/python-hub"/>
+  </url>
+
+  <!-- ═══════════════════════════════════════
+       BLOG PAGES
+  ═══════════════════════════════════════ -->
+
+  <!-- building-ai-telegram-bots-python -->
+  <url>
+    <loc>https://youssefalsherief.tech/en/blog/building-ai-telegram-bots-python</loc>
+    <lastmod>2025-12-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://youssefalsherief.tech/en/blog/building-ai-telegram-bots-python"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://youssefalsherief.tech/ar/blog/building-ai-telegram-bots-python"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://youssefalsherief.tech/ru/blog/building-ai-telegram-bots-python"/>
+  </url>
+  <url>
+    <loc>https://youssefalsherief.tech/ar/blog/building-ai-telegram-bots-python</loc>
+    <lastmod>2025-12-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://youssefalsherief.tech/en/blog/building-ai-telegram-bots-python"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://youssefalsherief.tech/ar/blog/building-ai-telegram-bots-python"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://youssefalsherief.tech/ru/blog/building-ai-telegram-bots-python"/>
+  </url>
+  <url>
+    <loc>https://youssefalsherief.tech/ru/blog/building-ai-telegram-bots-python</loc>
+    <lastmod>2025-12-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://youssefalsherief.tech/en/blog/building-ai-telegram-bots-python"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://youssefalsherief.tech/ar/blog/building-ai-telegram-bots-python"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://youssefalsherief.tech/ru/blog/building-ai-telegram-bots-python"/>
+  </url>
+
+  <!-- hardware-to-cloud-fullstack-journey -->
+  <url>
+    <loc>https://youssefalsherief.tech/en/blog/hardware-to-cloud-fullstack-journey</loc>
+    <lastmod>2025-11-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://youssefalsherief.tech/en/blog/hardware-to-cloud-fullstack-journey"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://youssefalsherief.tech/ar/blog/hardware-to-cloud-fullstack-journey"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://youssefalsherief.tech/ru/blog/hardware-to-cloud-fullstack-journey"/>
+  </url>
+  <url>
+    <loc>https://youssefalsherief.tech/ar/blog/hardware-to-cloud-fullstack-journey</loc>
+    <lastmod>2025-11-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://youssefalsherief.tech/en/blog/hardware-to-cloud-fullstack-journey"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://youssefalsherief.tech/ar/blog/hardware-to-cloud-fullstack-journey"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://youssefalsherief.tech/ru/blog/hardware-to-cloud-fullstack-journey"/>
+  </url>
+  <url>
+    <loc>https://youssefalsherief.tech/ru/blog/hardware-to-cloud-fullstack-journey</loc>
+    <lastmod>2025-11-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://youssefalsherief.tech/en/blog/hardware-to-cloud-fullstack-journey"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://youssefalsherief.tech/ar/blog/hardware-to-cloud-fullstack-journey"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://youssefalsherief.tech/ru/blog/hardware-to-cloud-fullstack-journey"/>
+  </url>
+
+  <!-- production-vps-docker-setup -->
+  <url>
+    <loc>https://youssefalsherief.tech/en/blog/production-vps-docker-setup</loc>
+    <lastmod>2025-10-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://youssefalsherief.tech/en/blog/production-vps-docker-setup"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://youssefalsherief.tech/ar/blog/production-vps-docker-setup"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://youssefalsherief.tech/ru/blog/production-vps-docker-setup"/>
+  </url>
+  <url>
+    <loc>https://youssefalsherief.tech/ar/blog/production-vps-docker-setup</loc>
+    <lastmod>2025-10-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://youssefalsherief.tech/en/blog/production-vps-docker-setup"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://youssefalsherief.tech/ar/blog/production-vps-docker-setup"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://youssefalsherief.tech/ru/blog/production-vps-docker-setup"/>
+  </url>
+  <url>
+    <loc>https://youssefalsherief.tech/ru/blog/production-vps-docker-setup</loc>
+    <lastmod>2025-10-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://youssefalsherief.tech/en/blog/production-vps-docker-setup"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://youssefalsherief.tech/ar/blog/production-vps-docker-setup"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://youssefalsherief.tech/ru/blog/production-vps-docker-setup"/>
+  </url>
+
+</urlset>
