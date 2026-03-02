@@ -1,0 +1,149 @@
+# دليل النشر على خادم هوستنجر (Hostinger VPS Deployment Guide) 🚀
+
+أهلاً بك في خادمك الجديد (`Ubuntu 24.04` كما يظهر في الصورة)! بما أنك قمت بتسجيل الدخول كـ `root`، فأنت جاهز للبدء. 
+
+هذه الخطوات صُممت لتنسخها وتلصقها في تلك الشاشة السوداء (Terminal) خطوة بخطوة لتهيئة الخادم ورفع مشروعك بالكامل:
+
+---
+
+## 🚀 الخطوة 1: تحديث الخادم
+أول شيء يجب فعله دائماً في سيرفر جديد هو تحديث حزمه للأمان والاستقرار. الصق هذين الأمرين:
+```bash
+apt update
+apt upgrade -y
+```
+
+## 🛠️ الخطوة 2: تثبيت الأدوات الأساسية (Git, Nginx, Docker)
+مشروعك يعتمد على `Docker` لتشغيل الباك إند والفرونت إند وقاعدة البيانات بسلاسة. سنقوم بتثبيت Docker وبرنامج Nginx الذي سيحيل الزوار إلى مشروعك.
+الصق هذا الأمر الطويل (يُمكنك نسخه بالكامل):
+
+```bash
+apt install -y git curl nginx
+curl -fsSL https://get.docker.com -o get-docker.sh
+sh get-docker.sh
+```
+
+ثم تأكد أن `Docker` يعمل:
+```bash
+systemctl enable docker
+systemctl start docker
+```
+
+## 📥 الخطوة 3: سحب المشروع من جيت هب (GitHub)
+الآن سننزل الكود الخاص بك من المستودع إلى السيرفر. (قم بتغيير الرابط إلى رابط مستودعك الفعلي إذا كان خاصاً بك).
+
+```bash
+# إنشاء مجلد للمشاريع
+mkdir -p /var/www
+cd /var/www
+
+# سحب المشروع (غيّر YOUR_GITHUB_USERNAME إلى حسابك)
+git clone https://github.com/KINGMAN8888/alsherief-tech-canvas.git
+cd alsherief-tech-canvas
+```
+
+## ⚙️ الخطوة 4: إعداد ملفات البيئة ([.env](file:///d:/Github/alsherief-tech-canvas/backend/.env))
+حيث أننا أضفنا [.env](file:///d:/Github/alsherief-tech-canvas/backend/.env) إلى [.gitignore](file:///d:/Github/alsherief-tech-canvas/.gitignore)، يجب إنشاء هذه الملفات على الخادم يدوياً.
+
+**1. إنشاء ملف الباك إند:**
+```bash
+nano backend/.env
+```
+*(الصق محتوى متغيرات البيئة الخاصة بالباك إند هنا، مثل `JWT_SECRET` المعقد الذي أنشأناه و `DATABASE_URL` و `PORT=5000`، ثم اضغط `Ctrl+X` ثم `Y` ثم `Enter` للحفظ).*
+
+**2. إنشاء ملف الفرونت إند:**
+```bash
+nano frontend/.env
+```
+*(الصق محتوى `VITE_API_URL` و `CORS_ORIGINS` الخاص بالإنتاج هنا، ثم احفظ بنفس الطريقة).*
+
+## 🐳 الخطوة 5: تشغيل المشروع بالدوكر (Docker Compose)
+الآن حان وقت السحر! سنأمر دوكر ببناء قاعدة البيانات، والباك إند، والواجهة الأمامية وتشغيلها في الخلفية.
+
+```bash
+docker compose up -d --build
+```
+*(هذه الخطوة قد تستغرق بضع دقائق حتى يقوم بتحميل وبناء كل شيء).*
+للتأكد من أن الحاويات تعمل، اكتب:
+```bash
+docker ps
+```
+ستجد 3 خدمات تعمل (`postgres_db`, `node_backend`, `react_frontend`) وتستخدم المنافذ 5432, 5000, 8080.
+
+## 🌐 الخطوة 6: ربط الدومين (Nginx Reverse Proxy)
+الآن مشروعك يعمل على المنفذ `8080` (للواجهة) و `5000` (للـ API). نريد أن يصله الناس عبر الدومين الخاص بك (مثلاً `youssefalsherief.tech`).
+
+احذف إعدادات Nginx الافتراضية واصنع واحدة جديدة:
+```bash
+rm /etc/nginx/sites-enabled/default
+nano /etc/nginx/sites-available/portfolio
+```
+
+الصق هذا المحتوى (انتبه لتغيير الدومين إلى الدومين الخاص بك):
+```nginx
+server {
+    listen 80;
+    server_name youssefalsherief.tech www.youssefalsherief.tech api.youssefalsherief.tech;
+
+    # توجيه الـ API للباك إند
+    location /api/ {
+        proxy_pass http://localhost:5000/api/;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+
+    # توجيه الباقي للواجهة الأمامية
+    location / {
+        proxy_pass http://localhost:8080;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+}
+```
+احفظ الملف (`Ctrl+X` ثم `Y` ثم `Enter`)، وثبّته وأعد تشغيل Nginx:
+```bash
+ln -s /etc/nginx/sites-available/portfolio /etc/nginx/sites-enabled/
+systemctl restart nginx
+```
+
+## 🔒 الخطوة 7: تفعيل شهادة الأمان (SSL - HTTPS)
+قم بتثبيت أداة `Certbot` لجعل الموقع آمناً بحرف (HTTPS) وقفل الحماية، وبشكل مجاني:
+
+```bash
+apt install -y python3-certbot-nginx
+certbot --nginx -d youssefalsherief.tech -d www.youssefalsherief.tech -d api.youssefalsherief.tech
+```
+*(سيطلب منك إيميلك والموافقة على الشروط، وسيقوم تلقائياً بتجديد الشهادة وضبطها).*
+
+---
+
+### 🎉 مبروك! موقعك الآن يعمل أونلاين!
+اكتب دومين موقعك في المتصفح وسيفتح لك!
+إذا واجهت أي خطأ في أي خطوة من هذه الخطوات، قم بنسخ الخطأ من الشاشة (Terminal) وأرسله لي وسأقوم بحله فوراً!
+
+---
+
+## 🔄 كيفية تحديث المشروع لاحقاً (Updating the Project)
+إذا قمت بتعديل الكود ورفعه إلى GitHub لاحقاً وأردت تحديث الموقع على الخادم، اتبع هذه الخطوات البسيطة:
+
+**1. ادخل إلى مجلد المشروع:**
+```bash
+cd /var/www/alsherief-tech-canvas
+```
+
+**2. اسحب التحديثات الجديدة من GitHub:**
+```bash
+git pull origin main
+```
+
+**3. أعد تطبيق التحديثات وإعادة تشغيل الحاويات في الخلفية:**
+```bash
+docker compose up -d --build
+```
+*(تمت برمجة حاوياتك بذكاء لتقوم ببناء نفسها من جديد دون الحاجة لإيقاف الموقع يدوياً، سيتم التحديث فوراً!)*
