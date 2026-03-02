@@ -21,6 +21,7 @@ services:
       - ./backend/.env
     environment:
       - NODE_ENV=production
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-admin}:${POSTGRES_PASSWORD:-admin_password}@db:5432/${POSTGRES_DB:-portfolio_db}?schema=public
     ports:
       - "5000:5000"
     depends_on:
