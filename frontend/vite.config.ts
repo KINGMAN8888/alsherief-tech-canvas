@@ -11,6 +11,11 @@ export default defineConfig(({ mode }) => ({
     host: "::",
     port: 8080,
     hmr: { overlay: false },
+    allowedHosts: [
+      "youssefalsherief.tech",
+      "www.youssefalsherief.tech",
+      "api.youssefalsherief.tech"
+    ],
   },
   plugins: [
     react(),
@@ -97,20 +102,20 @@ export default defineConfig(({ mode }) => ({
         orientation: "any",
         categories: ["portfolio", "technology"],
         icons: [
-          { src: "/favicon.ico",     sizes: "64x64",  type: "image/x-icon" },
+          { src: "/favicon.ico", sizes: "64x64", type: "image/x-icon" },
           { src: "/assets/icon.png", sizes: "192x192", type: "image/png", purpose: "any" },
           { src: "/assets/icon.png", sizes: "512x512", type: "image/png", purpose: "maskable" },
         ],
         shortcuts: [
           { name: "Projects", url: "/en#projects", description: "View portfolio projects" },
-          { name: "Contact",  url: "/en#contact",  description: "Get in touch" },
+          { name: "Contact", url: "/en#contact", description: "Get in touch" },
         ],
       },
     }),
     ViteImageOptimizer({
-      png:  { quality: 80 },
+      png: { quality: 80 },
       jpeg: { quality: 80 },
-      jpg:  { quality: 80 },
+      jpg: { quality: 80 },
       webp: { quality: 80 },
       avif: { quality: 70 },
     }),
@@ -124,8 +129,8 @@ export default defineConfig(({ mode }) => ({
         manualChunks: {
           vendor: ["react", "react-dom", "react-router-dom"],
           framer: ["framer-motion"],
-          three:  ["three"],
-          ui:     ["@radix-ui/react-dialog", "@radix-ui/react-slot", "lucide-react", "clsx", "tailwind-merge"],
+          three: ["three"],
+          ui: ["@radix-ui/react-dialog", "@radix-ui/react-slot", "lucide-react", "clsx", "tailwind-merge"],
         },
       },
     },
