@@ -1,0 +1,189 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-arm64-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String     @id @default(uuid())
+  email     String     @unique
+  password  String
+  name      String?
+  role      String     @default("admin")
+  posts     BlogPost[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  @@index([createdAt(sort: Desc)])
+}
+
+model Project {
+  id        String   @id @default(uuid())
+  slug      String   @unique
+  emoji     String
+  tech      String[]
+  link      String?
+  github    String?
+  image     String
+  color     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([createdAt(sort: Desc)])
+}
+
+model Skill { // Corresponds to SkillGroup in frontend
+  id        String   @id @default(uuid())
+  category  String
+  sub       String
+  items     String[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([createdAt(sort: Desc)])
+  @@index([category])
+  @@index([sub])
+}
+
+model Certification {
+  id        String   @id @default(uuid())
+  title      String
+  issuer    String
+  category  String
+  image     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([createdAt(sort: Desc)])
+}
+
+model Profile {
+  id                 String   @id @default("main")
+  name               String
+  nameAr             String?
+  headline           String
+  headlineAr         String?
+  bio                String
+  bioAr              String?
+  heroBio            String?  // Hero section description paragraph (EN)
+  heroBioAr          String?  // Hero section description paragraph (AR)
+  heroBioCyan         String?  // Word(s) to highlight in cyan in the hero description
+  heroBioViolet       String?  // Word(s) to highlight in violet in the hero description
+  heroRoles           Json?    // Array of role strings for the typing animation e.g. ["Full-Stack Developer","AI Engineer"]
+  location           String
+  locationAr         String?
+  availability       String
+  availabilityAr     String?
+  email              String
+  phone              String?
+  // Hero stats
+  yearsExp           Int      @default(5)
+  projectsCount      Int      @default(30)
+  technologiesCount  Int      @default(20)
+  countriesCount     Int      @default(3)
+  social             Json     // Stores github, linkedin, twitter, website, telegram, facebook, instagram, whatsapp URLs
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+}
+
+model ContactMessage {
+  id        String   @id @default(uuid())
+  name      String
+  email     String
+  phone     String?
+  service   String
+  message   String
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([isRead])
+  @@index([createdAt(sort: Desc)])
+}
+
+model BlogPost {
+  id          String   @id @default(uuid())
+  title       String
+  titleAr     String?
+  slug        String   @unique
+  excerpt     String?
+  excerptAr   String?
+  content     String
+  contentAr   String?
+  imageUrl    String?
+  category    String   @default("General")
+  readingTime String   @default("5 min read")
+  color       String   @default("from-cyan-500 to-blue-500")
+  published   Boolean  @default(false)
+  authorId    String
+  author      User     @relation(fields: [authorId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([published, createdAt(sort: Desc)])
+  @@index([createdAt(sort: Desc)])
+  @@index([category])
+  @@index([authorId])
+}
+
+model SiteSettings {
+  id          String   @id @default(uuid())
+  key         String   @unique
+  value       String   // JSON stringified value for flexibility
+  updatedAt   DateTime @updatedAt
+}
+
+model About {
+  id          String   @id @default("main")
+  label       String   @default("About Me")
+  labelAr     String?  @default("نبذة عني")
+  title       String   @default("Who I Am")
+  titleAr     String?  @default("من أنا")
+  subtitle    String   @default("A Computer Engineer bridging the physical and digital worlds — from server room to cloud infrastructure.")
+  subtitleAr  String?  @default("مهندس كمبيوتر يربط بين العوالم المادية والرقمية — من غرفة الخوادم إلى البنية التحتية السحابية.")
+  bio1        String   @default("I'm Youssef AlSherief (Youssef Mahmoud Saber), a Computer Engineer & Full-Stack Developer with a passion for building systems that matter.")
+  bio1Ar      String?  @default("أنا يوسف الشريف (يوسف محمود صابر)، مهندس كمبيوتر ومطور مواقع وتطبيقات شغوف ببناء الأنظمة المؤثرة.")
+  bio2        String   @default("My journey began six years ago in the depths of hardware maintenance — soldering PCBs, assembling servers, and configuring enterprise networks. That hands-on foundation gave me a deep understanding of how systems work at the physical level, which directly informs how I architect software today.")
+  bio2Ar      String?  @default("بدأت رحلتي منذ ست سنوات في أعماق صيانة المعدات — لحام اللوحات المطبوعة (PCBs)، وتجميع الخوادم، وإعداد شبكات المؤسسات. منحتني تلك المؤسسة العملية فهماً عميقاً لكيفية عمل الأنظمة على المستوى المادي، وهو ما يوجه مباشرة كيفية تصميم البرمجيات اليوم.")
+  bio3        String   @default("Currently studying Computer Engineering at AlSewedy University of Technology (Egypt), having completed a foundational year at Ural Federal University in Russia — an experience that expanded both my technical and cultural horizons.")
+  bio3Ar      String?  @default("أدرس حالياً هندسة الكمبيوتر في جامعة السويدي للتكنولوجيا (مصر)، بعد أن أكملت سنة تأسيسية في جامعة الأورال الفيدرالية في روسيا — وهي تجربة وسعت آفاقي التقنية والثقافية.")
+  bio4        String   @default("I focus on clean architecture, layered security, and automated CI/CD pipelines — always building with production and scale in mind.")
+  bio4Ar      String?  @default("أركز على البنية النظيفة، والأمن المتعدد الطبقات، وخطوط CI/CD الآلية — أقوم دائمًا بالبناء مع أخذ الإنتاج وقابلية التوسع في الاعتبار.")
+  
+  servicesLabel     String   @default("Services")
+  servicesLabelAr   String?  @default("الخدمات")
+  servicesTitle     String   @default("What I Offer")
+  servicesTitleAr   String?  @default("ماذا أقدم")
+  servicesSubtitle  String   @default("A versatile toolkit spanning hardware, software, cloud, and security — covering the full technology lifecycle.")
+  servicesSubtitleAr String? @default("مجموعة أدوات متعددة الاستخدامات تشمل الأجهزة والبرامج والخدمات السحابية والأمن — تغطي دورة حياة التكنولوجيا بالكامل.")
+  
+  updatedAt   DateTime @updatedAt
+}
+
+model Service {
+  id          String   @id @default(uuid())
+  icon        String   @default("Code2")
+  color       String   @default("from-cyan-500 to-blue-500")
+  glow        String   @default("rgba(6,182,212,0.22)")
+  borderHover String   @default("rgba(6,182,212,0.30)")
+
+  title       String
+  titleAr     String?
+  badge       String
+  badgeAr     String?
+  description String
+  descriptionAr String?
+
+  order       Int      @default(0) // For sorting in the frontend
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([order])
+  @@index([createdAt(sort: Desc)])
+}
