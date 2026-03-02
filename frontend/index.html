@@ -129,10 +129,10 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700&family=Rajdhani:wght@400;500;600;700&display=swap"
     rel="stylesheet" />
-</head>
 
-<body>
-  <div id="root"></div>
+  <!-- ═══════════════════════════════════════
+       PRODUCTION HACKS (Log Suppression)
+  ═══════════════════════════════════════ -->
   <script>
     // 1. Disable Workbox dev logs
     window.__WB_DISABLE_DEV_LOGS = true;
@@ -167,6 +167,10 @@
       originalConsoleError.apply(console, arguments);
     };
   </script>
+</head>
+
+<body>
+  <div id="root"></div>
   <script type="module" src="/src/main.tsx"></script>
 </body>
 
