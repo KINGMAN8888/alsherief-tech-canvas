@@ -10,7 +10,7 @@ export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
     port: 8080,
-    hmr: { overlay: false },
+    hmr: process.env.DISABLE_HMR === "true" ? false : { overlay: false },
     allowedHosts: [
       "youssefalsherief.tech",
       "www.youssefalsherief.tech",
