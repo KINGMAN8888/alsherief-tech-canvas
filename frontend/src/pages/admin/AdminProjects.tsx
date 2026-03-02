@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useApiQuery, useApiAdd, useApiUpdate, useApiDelete } from "@/hooks/useApiHooks";
-import { Plus, Edit2, Trash2, ExternalLink, Github, FolderGit2, X, Save, Upload } from "lucide-react";
+import { Plus, Edit2, Trash2, ExternalLink, Github, FolderGit2, X, Save, Upload, Loader2, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 import { uploadMediaFile } from "@/lib/mediaUpload";
 
@@ -26,10 +26,49 @@ const AdminProjects = () => {
     const [drawerOpen, setDrawerOpen] = useState(false);
     const [current, setCurrent] = useState<Partial<Project>>(emptyProject);
     const [isUploadingImage, setIsUploadingImage] = useState(false);
+    const [githubUrl, setGithubUrl] = useState("");
+    const [isFetchingGithub, setIsFetchingGithub] = useState(false);
 
-    const openNew = () => { setCurrent(emptyProject); setDrawerOpen(true); };
-    const openEdit = (p: Project) => { setCurrent(p); setDrawerOpen(true); };
-    const closeDrawer = () => { setDrawerOpen(false); setCurrent(emptyProject); };
+    const openNew = () => { setCurrent(emptyProject); setGithubUrl(""); setDrawerOpen(true); };
+    const openEdit = (p: Project) => { setCurrent(p); setGithubUrl(""); setDrawerOpen(true); };
+    const closeDrawer = () => { setDrawerOpen(false); setCurrent(emptyProject); setGithubUrl(""); };
+
+    const fetchFromGitHub = async () => {
+        const match = githubUrl.match(/github\.com\/([^/]+)\/([^/\s?#]+)/);
+        if (!match) { toast.error("Invalid GitHub URL"); return; }
+        const [, owner, repo] = match;
+        setIsFetchingGithub(true);
+        try {
+            const res = await fetch(`https://api.github.com/repos/${owner}/${repo}`, {
+                headers: { Accept: "application/vnd.github+json" },
+            });
+            if (!res.ok) throw new Error("Not found");
+            const data = await res.json();
+
+            const tech: string[] = [];
+            if (data.topics && data.topics.length > 0) {
+                tech.push(...data.topics);
+            } else if (data.language) {
+                tech.push(data.language);
+            }
+
+            setCurrent(prev => ({
+                ...prev,
+                slug: data.name,
+                github: data.html_url,
+                link: data.homepage || "",
+                image: `https://opengraph.githubassets.com/1/${owner}/${repo}`,
+                tech,
+                emoji: prev.emoji || "💻",
+                color: prev.color || "from-slate-700 to-slate-900",
+            }));
+            toast.success("GitHub data fetched! Review and save.");
+        } catch {
+            toast.error("Failed to fetch. Make sure the repository is public.");
+        } finally {
+            setIsFetchingGithub(false);
+        }
+    };
 
     const handleDelete = async (id: string, name: string) => {
         if (confirm(`Delete project "${name}"? This cannot be undone.`)) {
@@ -155,6 +194,35 @@ const AdminProjects = () => {
                             <button onClick={closeDrawer} title="Close drawer" aria-label="Close drawer" className="admin-btn-icon"><X size={16} /></button>
                         </div>
                         <form onSubmit={handleSave} className="space-y-4">
+                            {/* GitHub Auto-fetch */}
+                            <div className="rounded-xl border border-cyan-500/20 bg-cyan-500/5 p-4">
+                                <p className="text-xs font-semibold text-cyan-400 flex items-center gap-1.5 mb-3">
+                                    <Sparkles size={13} /> Auto-fill from GitHub
+                                </p>
+                                <div className="flex gap-2">
+                                    <input
+                                        type="text"
+                                        value={githubUrl}
+                                        onChange={e => setGithubUrl(e.target.value)}
+                                        onKeyDown={e => e.key === "Enter" && (e.preventDefault(), fetchFromGitHub())}
+                                        className="admin-input flex-1 text-sm"
+                                        placeholder="https://github.com/owner/repo"
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={fetchFromGitHub}
+                                        disabled={isFetchingGithub || !githubUrl.trim()}
+                                        className="admin-btn-primary px-4 shrink-0 disabled:opacity-50"
+                                    >
+                                        {isFetchingGithub
+                                            ? <><Loader2 size={14} className="animate-spin" /> Fetching...</>
+                                            : <><Github size={14} /> Fetch</>
+                                        }
+                                    </button>
+                                </div>
+                                <p className="text-[11px] text-slate-500 mt-2">Paste a public repo URL to auto-fill slug, tech stack, links, and preview image.</p>
+                            </div>
+
                             <div>
                                 <label className="admin-label">Slug (unique ID)</label>
                                 <input required type="text" value={current.slug || ""} onChange={e => setCurrent({ ...current, slug: e.target.value })} className="admin-input" placeholder="e.g. my-cool-project" />
