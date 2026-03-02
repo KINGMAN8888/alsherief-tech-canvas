@@ -87,10 +87,6 @@ const About = () => {
     });
   }, [servicesData]);
 
-  if (loadingAbout || loadingServices) {
-    return <section id="about" className="relative py-28 flex justify-center items-center"><LoadingSpinner /></section>;
-  }
-
   // Fallback to i18n if DB is empty for some reason
   const label = isRTL ? (aboutData?.labelAr || t("about.label")) : (aboutData?.label || t("about.label"));
   const title = isRTL ? (aboutData?.titleAr || t("about.title")) : (aboutData?.title || t("about.title"));
@@ -214,7 +210,9 @@ const About = () => {
           viewport={{ once: true, margin: "100px" }}
           className="flex flex-wrap justify-center gap-5"
         >
-          {servicesData?.map((s, i) => {
+          {loadingServices ? (
+            <div className="w-full text-cyan-400 py-12 flex justify-center animate-pulse tracking-widest font-rajdhani uppercase text-sm">Loading Services...</div>
+          ) : servicesData?.map((s, i) => {
             const IconMap = Icons as unknown as Record<string, ElementType>;
             const IconNode: ElementType = IconMap[s.icon] || Icons.Circle;
             const title = isRTL ? (s.titleAr || s.title) : s.title;
