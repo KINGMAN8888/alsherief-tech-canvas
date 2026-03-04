@@ -23,6 +23,8 @@ type DbSection = {
   isBulletList?: boolean;
   bullets?: string[];
   prose?: string;
+  codeBlocks?: string[];
+  isEmpty?: boolean;
 };
 
 const PALETTES = [
@@ -222,10 +224,12 @@ const ProjectDetail = () => {
               {dbSections.length > 0 ? (
                 /* Case A: render all real README sections from DB */
                 dbSections.map((sec, idx) => {
-                  const hasContent = sec.isBulletList
-                    ? (sec.bullets?.length ?? 0) > 0
-                    : (sec.prose?.length ?? 0) > 10;
-                  if (!hasContent) return null;
+                  const hasContent = sec.isEmpty === true
+                    ? false
+                    : (sec.isBulletList
+                      ? (sec.bullets?.length ?? 0) > 0
+                      : (sec.prose?.length ?? 0) > 10 || (sec.codeBlocks?.length ?? 0) > 0);
+                  if (!hasContent && !(sec.heading)) return null;
                   const pal = getPalette(sec.heading, idx);
                   return (
                     <motion.section
@@ -259,11 +263,32 @@ const ProjectDetail = () => {
                           ))}
                         </ul>
                       ) : (
-                        <p className="font-cairo text-sm leading-[1.9] text-slate-400 text-justify whitespace-pre-line">
-                          {sec.prose}
-                        </p>
+                        sec.prose ? (
+                          <p className="font-cairo text-sm leading-[1.9] text-slate-400 text-justify whitespace-pre-line">
+                            {sec.prose}
+                          </p>
+                        ) : null
+                      )}
+                      {/* Code blocks rendered as terminal-style boxes */}
+                      {(sec.codeBlocks ?? []).length > 0 && (
+                        <div className="mt-4 space-y-3">
+                          {(sec.codeBlocks ?? []).map((code, ci) => (
+                            <div key={ci} className="overflow-hidden rounded-xl border border-slate-700/50 bg-[#0d1117]">
+                              <div className="flex items-center gap-2 border-b border-slate-700/40 bg-slate-900/60 px-4 py-2.5">
+                                <span className="h-2.5 w-2.5 rounded-full bg-red-500/70" />
+                                <span className="h-2.5 w-2.5 rounded-full bg-yellow-500/70" />
+                                <span className="h-2.5 w-2.5 rounded-full bg-green-500/70" />
+                                <span className="ml-2 font-mono text-xs text-slate-500">bash</span>
+                              </div>
+                              <pre className="overflow-x-auto p-4 text-xs leading-relaxed text-emerald-300/90 font-mono">
+                                <code>{code}</code>
+                              </pre>
+                            </div>
+                          ))}
+                        </div>
                       )}
                     </motion.section>
+
                   );
                 })
               ) : (

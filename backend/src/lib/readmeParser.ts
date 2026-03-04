@@ -1,13 +1,15 @@
-// Smart README parser — extracts ALL sections with their real headings.
-// Returns structured data for dynamic rendering.
+// Smart README parser — extracts ALL sections with their REAL headings.
+// Returns structured data for fully dynamic rendering on the project detail page.
 
 export interface ReadmeSection {
-    heading: string;     // The actual heading text from the README
-    level: number;       // Heading level (1, 2, 3)
-    content: string;     // Raw markdown content
-    bullets: string[];   // Extracted bullet points (if any)
-    prose: string;       // Cleaned prose text
-    isBulletList: boolean;
+    heading: string;       // Actual heading from README
+    level: number;         // Heading depth (1, 2, 3, 4)
+    content: string;       // Original markdown content of the section
+    bullets: string[];     // Extracted bullet points
+    prose: string;         // Cleaned prose text (no bullets, no code blocks)
+    codeBlocks: string[];  // Extracted code blocks (preserved for rendering)
+    isBulletList: boolean; // True when the section is primarily bullets
+    isEmpty: boolean;      // True if nothing renderable was found
 }
 
 export interface ParsedReadme {
@@ -20,104 +22,123 @@ export interface ParsedReadme {
     techDetails: string;
 }
 
-// Strip markdown syntax to get clean readable text
+// ─── Markdown stripping (prose only) ────────────────────────────────────────
+
 function stripMarkdown(text: string): string {
     return text
-        .replace(/!\[.*?\]\(.*?\)/g, '')          // remove images
-        .replace(/\[([^\]]+)\]\(.*?\)/g, '$1')    // links → text
-        .replace(/`{3}[\s\S]*?`{3}/gm, '')        // code blocks
-        .replace(/`([^`]+)`/g, '$1')              // inline code
-        .replace(/^#{1,6}\s*/gm, '')              // headings
-        .replace(/\*{2}([^*]+)\*{2}/g, '$1')      // bold
-        .replace(/\*([^*]+)\*/g, '$1')            // italic
-        .replace(/_{2}([^_]+)_{2}/g, '$1')        // bold underscore
-        .replace(/_([^_]+)_/g, '$1')              // italic underscore
-        .replace(/^\s*>\s*/gm, '')                // blockquotes
-        .replace(/\[x\]|\[ \]/gi, '')             // checkboxes
-        .replace(/<!--[\s\S]*?-->/g, '')          // HTML comments
-        .replace(/<[^>]+>/g, '')                  // HTML tags
-        // Remove badges (shield.io patterns)
-        .replace(/\[!\[.*?\]\(https?:\/\/.*?badge.*?\)\]\(.*?\)/gi, '')
+        .replace(/!\[.*?\]\(.*?\)/g, '')           // images
+        .replace(/\[([^\]]+)\]\(.*?\)/g, '$1')     // links → text
+        .replace(/`([^`]+)`/g, '$1')               // inline code
+        .replace(/^#{1,6}\s*/gm, '')               // headings
+        .replace(/\*{2}([^*]+)\*{2}/g, '$1')       // bold
+        .replace(/\*([^*]+)\*/g, '$1')             // italic
+        .replace(/_{2}([^_]+)_{2}/g, '$1')         // bold underscore
+        .replace(/_([^_]+)_/g, '$1')               // italic underscore
+        .replace(/^\s*>\s*/gm, '')                 // blockquotes
+        .replace(/\[x\]|\[ \]/gi, '')              // checkboxes
+        .replace(/<!--[\s\S]*?-->/g, '')           // HTML comments
+        .replace(/<[^>]+>/g, '')                   // HTML tags
+        // Badges (shield.io, img.shields.io, etc.)
+        .replace(/\[!\[.*?\]\(https?:\/\/[^)]*\)\]\(.*?\)/gi, '')
         .replace(/\n{3,}/g, '\n\n')
         .trim();
 }
 
-// Extract bullet points from markdown content
+// ─── Extract code blocks from text ──────────────────────────────────────────
+
+function extractCodeBlocks(text: string): { cleaned: string; blocks: string[] } {
+    const blocks: string[] = [];
+    // Match fenced code blocks (``` or ~~~)
+    const cleaned = text.replace(/`{3,}([a-z]*)\n?([\s\S]*?)`{3,}/g, (_, lang, code) => {
+        const trimmed = code.trim();
+        if (trimmed.length > 0) blocks.push(trimmed);
+        return ''; // remove from prose
+    }).replace(/~{3,}([a-z]*)\n?([\s\S]*?)~{3,}/g, (_, lang, code) => {
+        const trimmed = code.trim();
+        if (trimmed.length > 0) blocks.push(trimmed);
+        return '';
+    });
+    return { cleaned, blocks };
+}
+
+// ─── Extract bullet points ───────────────────────────────────────────────────
+
 function extractBullets(text: string): string[] {
     const bullets: string[] = [];
-    const lines = text.split('\n');
-    for (const line of lines) {
-        const match = line.trim().match(/^[-*+]\s+(.+)|^\d+\.\s+(.+)/);
-        if (match) {
-            let bullet = (match[1] || match[2])
+    for (const line of text.split('\n')) {
+        const m = line.trim().match(/^[-*+]\s+(.+)|^\d+\.\s+(.+)/);
+        if (m) {
+            const bullet = (m[1] || m[2])
                 .replace(/\*{2}([^*]+)\*{2}/g, '$1')
                 .replace(/\*([^*]+)\*/g, '$1')
                 .replace(/`([^`]+)`/g, '$1')
                 .trim();
-            if (bullet.length > 5) bullets.push(bullet);
+            if (bullet.length > 4) bullets.push(bullet);
         }
     }
     return bullets;
 }
 
-// Extract clean prose paragraphs (exclude bullets and headings)
-function extractProse(text: string): string {
-    const lines = text.split('\n');
-    const paras: string[] = [];
-    let current = '';
+// ─── Extract prose paragraphs (non-bullet, non-heading lines) ───────────────
 
-    for (const line of lines) {
-        const trimmed = line.trim();
-        if (!trimmed || trimmed.match(/^[-*+]\s/) || trimmed.match(/^\d+\.\s/) || trimmed.startsWith('#')) {
-            if (current) { paras.push(current.trim()); current = ''; }
+function extractProse(text: string): string {
+    const paras: string[] = [];
+    let cur = '';
+    for (const line of text.split('\n')) {
+        const t = line.trim();
+        if (!t || t.match(/^[-*+]\s/) || t.match(/^\d+\.\s/) || t.startsWith('#')) {
+            if (cur) { paras.push(cur.trim()); cur = ''; }
             continue;
         }
-        current += (current ? ' ' : '') + trimmed;
+        cur += (cur ? ' ' : '') + t;
     }
-    if (current) paras.push(current.trim());
-
-    return stripMarkdown(paras.filter(p => p.length > 10).join('\n\n')).slice(0, 1500);
+    if (cur) paras.push(cur.trim());
+    return stripMarkdown(paras.filter(p => p.length > 8).join('\n\n')).slice(0, 2000);
 }
 
-// Sections to SKIP (installation, license, badge-only sections, etc.)
-const SKIP_PATTERNS = /^(installation|getting.started|license|contributing|changelog|credits|acknowledgment|badge|copyright|contact|author|prerequisit|how.to.run|setup|clone|npm|yarn|docker.compose)/i;
+// ─── Intro detection ─────────────────────────────────────────────────────────
 
-// Sections we consider "intro" (no heading or top-level title)
-const INTRO_PATTERNS = /^(overview|about|introduction|intro|description|summary|what.+is|project)/i;
+const INTRO_PATTERNS = /^(overview|about|introduction|intro|description|summary|what.+is|project|features|highlights)/i;
+
+// ─── Main parser ─────────────────────────────────────────────────────────────
 
 export function parseReadme(markdown: string): ParsedReadme {
     if (!markdown.trim()) {
         return { sections: [], overview: '', longDescription: '', features: [], challenges: '', techDetails: '' };
     }
 
-    // Remove leading badges / shields block before any real content
-    const cleanedMarkdown = markdown
-        .replace(/(?:!\[.*?\]\(https?:\/\/[^\)]*\)\s*)+\n*/g, '')
-        .replace(/<!--[\s\S]*?-->/g, '');
+    // Strip leading badge block before any real content
+    const clean = markdown
+        .replace(/<!--[\s\S]*?-->/g, '')
+        .replace(/\n{3,}/g, '\n\n');
 
-    const lines = cleanedMarkdown.split('\n');
+    // ── Split into sections by heading ────────────────────────────────────────
+    const lines = clean.split('\n');
     const rawSections: Array<{ heading: string; level: number; lines: string[] }> = [];
-    let currentHeading = '';
-    let currentLevel = 0;
-    let currentLines: string[] = [];
+    let curHeading = '';
+    let curLevel = 0;
+    let curLines: string[] = [];
 
     for (const line of lines) {
-        const headingMatch = line.match(/^(#{1,4})\s+(.+)$/);
-        if (headingMatch) {
-            if (currentLines.join('').trim()) {
-                rawSections.push({ heading: currentHeading, level: currentLevel, lines: currentLines });
+        const hm = line.match(/^(#{1,4})\s+(.+)$/);
+        if (hm) {
+            if (curLines.join('').trim()) {
+                rawSections.push({ heading: curHeading, level: curLevel, lines: curLines });
             }
-            currentHeading = headingMatch[2].trim().replace(/[`*_]/g, '');
-            currentLevel = headingMatch[1].length;
-            currentLines = [];
+            curHeading = hm[2].trim()
+                .replace(/[`*_]/g, '')              // strip inline markdown from heading
+                .replace(/^[^\w\s]+\s*/, '');       // strip leading emoji/symbols
+            curLevel = hm[1].length;
+            curLines = [];
         } else {
-            currentLines.push(line);
+            curLines.push(line);
         }
     }
-    if (currentLines.join('').trim()) {
-        rawSections.push({ heading: currentHeading, level: currentLevel, lines: currentLines });
+    if (curLines.join('').trim()) {
+        rawSections.push({ heading: curHeading, level: curLevel, lines: curLines });
     }
 
+    // ── Process each section ─────────────────────────────────────────────────
     const sections: ReadmeSection[] = [];
     let overview = '';
     let longDescription = '';
@@ -126,49 +147,75 @@ export function parseReadme(markdown: string): ParsedReadme {
     let techDetails = '';
 
     for (const raw of rawSections) {
-        const content = raw.lines.join('\n').trim();
-        if (!content) continue;
+        const rawContent = raw.lines.join('\n').trim();
+        if (!rawContent && !raw.heading) continue;
 
-        const headingLower = raw.heading.toLowerCase();
+        // Extract code blocks FIRST (before prose extraction)
+        const { cleaned: noCodeContent, blocks: codeBlocks } = extractCodeBlocks(rawContent);
 
-        // Skip noise sections
-        if (raw.heading && SKIP_PATTERNS.test(headingLower)) continue;
+        const bullets = extractBullets(noCodeContent);
+        const prose = extractProse(noCodeContent);
+        const isBulletList = bullets.length >= 2 && bullets.length >= (prose.split('.').length - 1);
 
-        // Skip very short sections (< 30 chars of real content)
-        const stripped = stripMarkdown(content);
-        if (stripped.length < 20 && raw.heading) continue;
+        // A section is empty only if there's truly nothing to show
+        const isEmpty = bullets.length === 0 && prose.length < 10 && codeBlocks.length === 0;
 
-        const bullets = extractBullets(content);
-        const prose = extractProse(content);
-        const isBulletList = bullets.length >= 2;
+        if (isEmpty && raw.heading === '') continue; // skip truly empty unnamed sections
 
         const section: ReadmeSection = {
-            heading: raw.heading || '',
+            heading: raw.heading,
             level: raw.level,
-            content,
+            content: rawContent,
             bullets,
             prose,
+            codeBlocks,
             isBulletList,
+            isEmpty,
         };
 
-        // Fill convenience fields
-        if (!raw.heading || INTRO_PATTERNS.test(headingLower)) {
-            if (!longDescription) longDescription = prose;
-            if (!overview) overview = prose.split('\n')[0].slice(0, 500);
-        }
+        // ── Convenience field mapping ─────────────────────────────────────────
+        const h = raw.heading.toLowerCase();
 
-        if (/feature|highlight|capabilit|what.+offer|what.+do|function/i.test(headingLower)) {
+        if (!raw.heading || INTRO_PATTERNS.test(h)) {
+            if (!longDescription) longDescription = prose;
+            if (!overview && prose) overview = prose.split('\n')[0].slice(0, 500);
+        }
+        if (/feature|highlight|capabilit|what.+offer|what.+do|function/i.test(h)) {
             if (features.length === 0) features = isBulletList ? bullets : prose.split('. ').filter(s => s.length > 20);
         }
-        if (/challenge|problem|difficult|issue|limitation/i.test(headingLower)) {
+        if (/challenge|problem|difficult|issue|limitation/i.test(h)) {
             if (!challenges) challenges = prose;
         }
-        if (/tech|stack|built.with|architect|tool|framework|technology/i.test(headingLower)) {
+        if (/tech|stack|built.with|architect|tool|framework|technology/i.test(h)) {
             if (!techDetails) techDetails = isBulletList ? bullets.join(' · ') : prose;
         }
 
         sections.push(section);
     }
 
-    return { sections, overview, longDescription, features, challenges, techDetails };
+    // ── Merge sub-sections (level 3+) under their parent ─────────────────────
+    // This way "## Tech Stack > ### Frontend > ### Backend" appear as one card
+    const merged: ReadmeSection[] = [];
+    for (const sec of sections) {
+        if (sec.level >= 3 && merged.length > 0) {
+            const parent = merged[merged.length - 1];
+            // Append sub-section content to parent
+            if (sec.heading && (sec.bullets.length > 0 || sec.prose.length > 0 || sec.codeBlocks.length > 0)) {
+                // Add sub-heading as a bold label inside bullets/prose
+                const subLabel = `**${sec.heading}**`;
+                if (sec.isBulletList) {
+                    parent.bullets.push(subLabel, ...sec.bullets);
+                    parent.isBulletList = true;
+                } else if (sec.prose.length > 10) {
+                    parent.prose += `\n\n**${sec.heading}**\n${sec.prose}`;
+                }
+                parent.codeBlocks.push(...sec.codeBlocks);
+                parent.isEmpty = false;
+            }
+        } else {
+            merged.push(sec);
+        }
+    }
+
+    return { sections: merged, overview, longDescription, features, challenges, techDetails };
 }
