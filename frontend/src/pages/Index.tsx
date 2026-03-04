@@ -3,13 +3,14 @@ import { Helmet } from "react-helmet-async";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 
-// Standard imports for initial viewport (Hero, About, Navbar)
+// Standard imports for initial viewport (Hero, Navbar)
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
-import NeuralBackground from "@/components/NeuralBackground";
-import About from "@/components/About";
 
 // Lazy-loaded components for below-the-fold
+// NeuralBackground is lazy so three.js is NOT part of the initial module graph
+const NeuralBackground = React.lazy(() => import("@/components/NeuralBackground"));
+const About = React.lazy(() => import("@/components/About"));
 const Services = React.lazy(() => import("@/components/Services"));
 const Experience = React.lazy(() => import("@/components/Experience"));
 const Projects = React.lazy(() => import("@/components/Projects"));
@@ -44,7 +45,10 @@ const Index = () => {
     <main className="relative min-h-screen bg-transparent">
 
       {/* ── GLOBAL ANIMATED NEURAL NETWORK BACKGROUND ── */}
-      <NeuralBackground />
+      {/* Lazy so three.js (1.6 MB) is excluded from the initial request chain */}
+      <React.Suspense fallback={null}>
+        <NeuralBackground />
+      </React.Suspense>
 
       {/* ── GLOBAL BACKGROUND LAYERS (matches Hero aesthetic) ── */}
       <div className="fixed inset-0 -z-10 hero-hex-grid opacity-[0.18] pointer-events-none" />
@@ -88,7 +92,10 @@ const Index = () => {
 
       <Navbar />
       <Hero />
-      <About />
+      {/* About lazy-loaded so its JS doesn't block initial Hero paint / LCP */}
+      <React.Suspense fallback={null}>
+        <About />
+      </React.Suspense>
 
       {/* ── BELOW THE FOLD LAZY LOADED COMPONENTS ── */}
       {/* 

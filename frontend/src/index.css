@@ -240,67 +240,87 @@
   height: 200%;
   left: -50%;
   top: -50%;
-  background-image:
-    linear-gradient(rgba(6, 182, 212, 0.07) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(6, 182, 212, 0.07) 1px, transparent 1px);
-  background-size: 50px 50px;
   transform: rotateX(65deg) translateZ(-100px);
-  animation: grid-move 15s linear infinite;
   -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 50%, black 30%, transparent 70%);
   mask-image: radial-gradient(ellipse 80% 60% at 50% 50%, black 30%, transparent 70%);
 }
 
+/* Background lives on ::before so we can animate transform (composited) instead of background-position */
+.grid-plane::before {
+  content: '';
+  position: absolute;
+  inset: -50px;
+  background-image:
+    linear-gradient(rgba(6, 182, 212, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(6, 182, 212, 0.07) 1px, transparent 1px);
+  background-size: 50px 50px;
+  animation: grid-move 15s linear infinite;
+  will-change: transform;
+}
+
 @keyframes grid-move {
   0% {
-    background-position: 0 0;
+    transform: translate(0, 0);
   }
 
   100% {
-    background-position: 50px 50px;
+    transform: translate(50px, 50px);
   }
 }
 
 /* ═══════════ SCAN LINE EFFECTS ═══════════ */
 .hero-scanline {
   position: absolute;
-  top: -100%;
+  top: 0;
   left: 0;
   width: 100%;
   height: 2px;
   background: linear-gradient(90deg, transparent 0%, rgba(6, 182, 212, 0.4) 50%, transparent 100%);
   animation: scanline-move 8s linear infinite;
+  will-change: transform;
 }
 
 @keyframes scanline-move {
   0% {
-    top: -5%;
+    transform: translateY(-5vh);
   }
 
   100% {
-    top: 105%;
+    transform: translateY(105vh);
   }
 }
 
 .card-scanline::after {
   content: '';
   position: absolute;
-  top: -100%;
+  top: 0;
   left: 0;
   width: 100%;
   height: 1px;
   background: linear-gradient(90deg, transparent 0%, rgba(6, 182, 212, 0.3) 50%, transparent 100%);
   animation: scanline-move 5s linear infinite;
   box-shadow: 0 0 10px rgba(6, 182, 212, 0.2);
+  will-change: transform;
 }
 
 /* ═══════════ HONEYCOMB GRID (Services) ═══════════ */
+/* Background lives on ::before so we can animate transform (composited) instead of background-position */
 .honeycomb-grid {
+  position: relative;
+  overflow: hidden;
+}
+
+.honeycomb-grid::before {
+  content: '';
+  position: absolute;
+  inset: -46px -40px; /* extend one full tile in each direction to hide translation gap */
   background-image:
     radial-gradient(circle, rgba(6, 182, 212, 0.08) 1.5px, transparent 1.5px),
     radial-gradient(circle, rgba(139, 92, 246, 0.06) 1.5px, transparent 1.5px);
   background-size: 40px 46px;
   background-position: 0 0, 20px 23px;
   animation: hex-shift 20s linear infinite;
+  will-change: transform;
 }
 
 /* Project / footer small-dot radial grids moved from inline styles */
@@ -330,8 +350,13 @@
 .svc-hover-overlay { background: radial-gradient(ellipse 80% 60% at 50% 0%, var(--svc-glow) 0%, transparent 70%); }
 .svc-hover-border { box-shadow: inset 0 0 0 1px var(--svc-border-hover); }
 
-/* Navbar progress bar uses --scroll-progress */
-.nav-progress { width: var(--scroll-progress, 0%); transition: width 0.12s linear; }
+/* Navbar progress bar uses --scroll-progress-frac (0–1) for composited scaleX */
+.nav-progress {
+  width: 100%;
+  transform: scaleX(var(--scroll-progress-frac, 0));
+  transform-origin: left center;
+  transition: transform 0.12s linear;
+}
 
 /* Hero image filter moved from inline */
 .hero-photo-img {
@@ -352,11 +377,11 @@
 
 @keyframes hex-shift {
   0% {
-    background-position: 0 0, 20px 23px;
+    transform: translate(0, 0);
   }
 
   100% {
-    background-position: 40px 46px, 60px 69px;
+    transform: translate(40px, 46px);
   }
 }
 
@@ -640,7 +665,7 @@
 
 .admin-nav-item {
   position: relative;
-  transition: all 0.2s ease;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
   border-left: 2px solid transparent;
 }
 .admin-nav-item:hover {
@@ -659,7 +684,7 @@
   border-radius: 1rem;
   background: linear-gradient(135deg, rgba(6,182,212,0.05) 0%, rgba(139,92,246,0.05) 100%);
   border: 1px solid rgba(6,182,212,0.12);
-  transition: all 0.3s ease;
+  transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
   overflow: hidden;
 }
 .admin-stat-card::before {
@@ -690,7 +715,7 @@
   font-size: 0.875rem;
   color: #e2e8f0;
   outline: none;
-  transition: all 0.2s ease;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
   font-family: 'Cairo', sans-serif;
 }
 .admin-input:focus {
@@ -708,7 +733,7 @@
   font-size: 0.875rem;
   color: #e2e8f0;
   outline: none;
-  transition: all 0.2s ease;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
   resize: vertical;
   font-family: 'Cairo', sans-serif;
 }
@@ -730,7 +755,7 @@
   font-weight: 700;
   font-family: 'Rajdhani', sans-serif;
   letter-spacing: 0.02em;
-  transition: all 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
   border: none;
   cursor: pointer;
   box-shadow: 0 4px 16px rgba(6,182,212,0.25);
@@ -755,7 +780,7 @@
   font-weight: 600;
   border: 1px solid rgba(51,65,85,0.6);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
 .admin-btn-ghost:hover {
   background: rgba(255,255,255,0.08);
@@ -775,7 +800,7 @@
   font-weight: 600;
   border: 1px solid rgba(239,68,68,0.2);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 }
 .admin-btn-danger:hover {
   background: rgba(239,68,68,0.2);
@@ -792,7 +817,7 @@
   border-radius: 0.5rem;
   border: 1px solid transparent;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
   background: rgba(255,255,255,0.04);
   color: #64748b;
 }

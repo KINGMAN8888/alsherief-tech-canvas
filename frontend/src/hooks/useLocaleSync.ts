@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { isValidLocale, RTL_LOCALES, type Locale } from "@/i18n";
+import { isValidLocale, RTL_LOCALES, ensureLocaleLoaded, type Locale } from "@/i18n";
 
 export const useLocaleSync = () => {
     const { locale } = useParams<{ locale: string }>();
@@ -19,15 +19,17 @@ export const useLocaleSync = () => {
 
         const validLocale = currentParam as Locale;
 
-        // Sync i18n language
-        if (i18n.language !== validLocale) {
-            i18n.changeLanguage(validLocale);
-        }
-
-        // Sync HTML dir + lang attributes
+        // Sync HTML dir + lang attributes immediately (no async needed)
         const isRtl = RTL_LOCALES.includes(validLocale);
         document.documentElement.dir = isRtl ? "rtl" : "ltr";
         document.documentElement.lang = validLocale;
+
+        // Ensure bundle is loaded before switching language to avoid flash
+        if (i18n.language !== validLocale) {
+            ensureLocaleLoaded(validLocale).then(() => {
+                i18n.changeLanguage(validLocale);
+            });
+        }
     }, [locale, i18n, navigate]);
 
     return { locale };

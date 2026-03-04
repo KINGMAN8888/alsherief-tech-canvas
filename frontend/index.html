@@ -40,7 +40,11 @@
   <!-- ═══════════════════════════════════════
          PRELOAD & PRECONNECT LCP ASSETS
     ═══════════════════════════════════════ -->
-  <link rel="preload" as="image" href="/assets/CV.P.W.B.webp" />
+  <link rel="preload" as="image"
+    href="/assets/CV.P.W.B-440.webp"
+    imagesrcset="/assets/CV.P.W.B-440.webp 440w, /assets/CV.P.W.B-880.webp 880w, /assets/CV.P.W.B.webp 1000w"
+    imagesizes="(max-width: 768px) 90vw, 440px"
+    type="image/webp" fetchpriority="high" />
   <link rel="preconnect" href="https://api.youssefalsherief.tech" crossorigin />
 
   <!-- ═══════════════════════════════════════

@@ -180,10 +180,13 @@ const Hero = () => {
         <div className="hero-grid">
 
           {/* ── PROFILE CARD (mobile: first / desktop: right) ── */}
+          {/* NOTE: opacity starts at 1 so the LCP <img> is visibly painted immediately.
+              Animating from opacity:0 would keep the image invisible until framer fires,
+              inflating the LCP "element render delay" metric by ~1–3 s. */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.8, y: 30 }}
+            initial={{ opacity: 1, scale: 0.96, y: 16 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.2, ease: "easeOut" }}
+            transition={{ duration: 0.7, ease: "easeOut" }}
             className="hero-card-col"
           >
             {/* ══ FRAMELESS PHOTO — unified mobile + desktop ══ */}
@@ -228,7 +231,9 @@ const Hero = () => {
 
               {/* Photo — transparent background */}
               <img
-                src="/assets/CV.P.W.B.webp"
+                src="/assets/CV.P.W.B-440.webp"
+                srcSet="/assets/CV.P.W.B-440.webp 440w, /assets/CV.P.W.B-880.webp 880w, /assets/CV.P.W.B.webp 1000w"
+                sizes="(max-width: 768px) 90vw, 440px"
                 alt={t("nav.name")}
                 className="relative z-10 w-full h-full object-contain select-none transition-transform duration-1000 group-hover:scale-[1.03] hero-photo-img"
                 loading="eager"

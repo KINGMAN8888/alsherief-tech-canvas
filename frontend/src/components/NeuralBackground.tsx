@@ -17,6 +17,7 @@ const NeuralBackground = () => {
     let rendererInstance: any;
     let sceneInstance: any;
     let mounted = true;
+    let handleVisibility: (() => void) | undefined;
 
     const initThree = async () => {
       const THREE = await import("three");
@@ -194,6 +195,16 @@ const NeuralBackground = () => {
       };
 
       animate();
+
+      /* Pause rAF loop while tab is hidden — resumes automatically on focus */
+      handleVisibility = () => {
+        if (document.visibilityState === "hidden") {
+          cancelAnimationFrame(animId);
+        } else {
+          animate();
+        }
+      };
+      document.addEventListener("visibilitychange", handleVisibility);
     };
 
     // Delay initialization until after LCP — use requestIdleCallback if available,
@@ -211,6 +222,7 @@ const NeuralBackground = () => {
 
     return () => {
       mounted = false;
+      if (handleVisibility) document.removeEventListener("visibilitychange", handleVisibility);
       if (timerId !== undefined) clearTimeout(timerId);
       if (idleId !== undefined && typeof window.cancelIdleCallback === "function") {
         window.cancelIdleCallback(idleId);

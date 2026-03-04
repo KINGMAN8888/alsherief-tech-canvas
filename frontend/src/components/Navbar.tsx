@@ -4,6 +4,7 @@ import { Menu, X, Download, ChevronRight, Globe } from "lucide-react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useProfile } from "@/hooks/useProfile";
+import { ensureLocaleLoaded, isValidLocale } from "@/i18n";
 
 const langs = [
   { code: "en", label: "EN", flag: "🇺🇸" },
@@ -68,6 +69,7 @@ const Navbar = () => {
           const pct = cachedTotal > 0 ? (scrollY / cachedTotal) * 100 : 0;
           setScrollProgress(pct);
           document.documentElement.style.setProperty("--scroll-progress", `${pct}%`);
+          document.documentElement.style.setProperty("--scroll-progress-frac", `${pct / 100}`);
           ticking = false;
         });
         ticking = true;
@@ -139,7 +141,9 @@ const Navbar = () => {
   const isActive = (href: string) =>
     activeSection === href.replace("#", "");
 
-  const switchLocale = (code: string) => {
+  const switchLocale = async (code: string) => {
+    // Pre-load the locale bundle so translations are ready before navigate
+    if (isValidLocale(code)) await ensureLocaleLoaded(code);
     // Keep the current sub-path (e.g., /projects/slug) when switching locale
     const segments = location.pathname.split("/").filter(Boolean);
     // segments[0] is the current locale; replace it
