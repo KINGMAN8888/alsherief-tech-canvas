@@ -8,7 +8,6 @@ import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import NeuralBackground from "@/components/NeuralBackground";
 import About from "@/components/About";
-import CustomCursor from "@/components/CustomCursor";
 
 // Lazy-loaded components for below-the-fold
 const Services = React.lazy(() => import("@/components/Services"));
@@ -56,7 +55,6 @@ const Index = () => {
         <div className="absolute bottom-0 right-1/3 h-[400px] w-[400px] rounded-full bg-cyan-400/[0.03] blur-[140px]" />
       </div>
 
-      <CustomCursor />
       <Helmet>
         <title>{t("pages.homeTitle")}</title>
         <meta name="description" content={t("pages.homeDescription")} />

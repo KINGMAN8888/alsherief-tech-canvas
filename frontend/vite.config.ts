@@ -124,13 +124,25 @@ export default defineConfig(({ mode }) => ({
     alias: { "@": path.resolve(__dirname, "./src") },
   },
   build: {
+    target: "esnext",
+    cssCodeSplit: true,
+    reportCompressedSize: false,
+    chunkSizeWarningLimit: 1500,
     rollupOptions: {
       output: {
-        manualChunks: {
-          vendor: ["react", "react-dom", "react-router-dom"],
-          framer: ["framer-motion"],
-          three: ["three"],
-          ui: ["@radix-ui/react-dialog", "@radix-ui/react-slot", "lucide-react", "clsx", "tailwind-merge"],
+        manualChunks(id) {
+          if (!id.includes("node_modules")) return;
+          if (id.includes("three")) return "three";
+          if (id.includes("framer-motion")) return "framer";
+          if (id.includes("@radix-ui/")) return "radix";
+          if (id.includes("lucide-react")) return "lucide";
+          if (id.includes("@tanstack/")) return "query";
+          if (id.includes("i18next") || id.includes("react-i18next")) return "i18n";
+          if (
+            id.includes("react-dom") ||
+            id.includes("react-router") ||
+            id.includes("/react/")
+          ) return "vendor";
         },
       },
     },

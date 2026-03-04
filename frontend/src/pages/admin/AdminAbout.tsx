@@ -6,8 +6,19 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Save, Plus, Trash2, Pencil, RefreshCw, GripVertical, CheckCircle2 } from "lucide-react";
-import * as Icons from "lucide-react";
+import { Save, Plus, Trash2, Pencil, RefreshCw, GripVertical, CheckCircle2, Circle, Code2, Monitor, FileText, Smartphone } from "lucide-react";
+
+/**
+ * Minimal ICON_REGISTRY to avoid a separate module; extend with additional icons as needed.
+ * Keys should match the icon names stored in your service records (e.g., "Code2", "Monitor").
+ */
+const ICON_REGISTRY: Record<string, any> = {
+    Code2,
+    Monitor,
+    FileText,
+    Smartphone,
+    Circle
+};
 
 interface About {
     id?: string;
@@ -258,7 +269,7 @@ export default function AdminAbout() {
                 {/* Services Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {services?.map((svc) => {
-                        const IconNode = (Icons as any)[svc.icon] || Icons.Circle;
+                        const IconNode = ICON_REGISTRY[svc.icon] || Circle;
                         return (
                             <div key={svc.id} className="relative group bg-slate-900/40 border border-slate-700/50 rounded-xl p-5 hover:border-cyan-500/30 transition-colors">
                                 <div className="flex justify-between items-start mb-4">

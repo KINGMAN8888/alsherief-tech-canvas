@@ -12,9 +12,30 @@
   <link rel="icon" type="image/png" sizes="16x16" href="/assets/icon.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/icon.png" />
   <link rel="shortcut icon" href="/assets/icon.png" />
-  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
-  <meta name="theme-color" content="#020810" media="(prefers-color-scheme: dark)" />
   <meta name="msapplication-TileColor" content="#020810" />
+  <script>
+    (function() {
+      var ua = navigator.userAgent || '';
+      // Skip Firefox / Opera where meta[name="theme-color"] isn't supported
+      if (/Firefox|FxiOS|OPR|Opera/.test(ua)) return;
+
+      var m = document.createElement('meta');
+      m.name = 'theme-color';
+
+      var darkQuery = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)');
+      m.content = darkQuery && darkQuery.matches ? '#020810' : '#ffffff';
+      document.head.appendChild(m);
+
+      // Update on color-scheme changes
+      if (darkQuery) {
+        if (typeof darkQuery.addEventListener === 'function') {
+          darkQuery.addEventListener('change', function(e){ m.content = e.matches ? '#020810' : '#ffffff'; });
+        } else if (typeof darkQuery.addListener === 'function') {
+          darkQuery.addListener(function(e){ m.content = e.matches ? '#020810' : '#ffffff'; });
+        }
+      }
+    })();
+  </script>
 
   <!-- ═══════════════════════════════════════
          PRELOAD & PRECONNECT LCP ASSETS
@@ -133,8 +154,15 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
+    rel="preload"
+    as="style"
     href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700&family=Rajdhani:wght@400;500;600;700&display=swap"
-    rel="stylesheet" />
+    onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700&family=Rajdhani:wght@400;500;600;700&display=swap"
+      rel="stylesheet" />
+  </noscript>
 
   <!-- ═══════════════════════════════════════
        PRODUCTION HACKS (Log Suppression)

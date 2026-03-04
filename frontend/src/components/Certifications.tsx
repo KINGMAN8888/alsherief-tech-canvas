@@ -256,6 +256,7 @@ const Certifications = () => {
                   src={selected.image}
                   alt={selected.title}
                   className="w-full object-contain max-h-[65vh]"
+                  loading="lazy"
                 />
               </div>
 

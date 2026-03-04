@@ -196,12 +196,25 @@ const NeuralBackground = () => {
       animate();
     };
 
-    // Delay initialization to prioritize text render and LCP
-    const timer = setTimeout(initThree, 100);
+    // Delay initialization until after LCP — use requestIdleCallback if available,
+    // falling back to a 600ms setTimeout to keep TBT low.
+    let timerId: ReturnType<typeof setTimeout> | undefined;
+    let idleId: number | undefined;
+    const schedule = (cb: () => void) => {
+      if (typeof window.requestIdleCallback === "function") {
+        idleId = window.requestIdleCallback(cb, { timeout: 2000 });
+      } else {
+        timerId = setTimeout(cb, 600);
+      }
+    };
+    schedule(initThree);
 
     return () => {
       mounted = false;
-      clearTimeout(timer);
+      if (timerId !== undefined) clearTimeout(timerId);
+      if (idleId !== undefined && typeof window.cancelIdleCallback === "function") {
+        window.cancelIdleCallback(idleId);
+      }
       if (animId) cancelAnimationFrame(animId);
       if (rendererInstance) {
         rendererInstance.dispose();

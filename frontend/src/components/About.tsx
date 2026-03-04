@@ -3,7 +3,8 @@ import { useTranslation } from "react-i18next";
 import { useApiQuery } from "@/hooks/useApiHooks";
 import { useEffect } from "react";
 import type { ElementType } from "react";
-import * as Icons from "lucide-react";
+import { Circle } from "lucide-react";
+import { ICON_REGISTRY } from "@/lib/iconRegistry";
 import LoadingSpinner from "./LoadingSpinner";
 
 const containerVariants = {
@@ -213,8 +214,7 @@ const About = () => {
           {loadingServices ? (
             <div className="w-full text-cyan-400 py-12 flex justify-center animate-pulse tracking-widest font-rajdhani uppercase text-sm">Loading Services...</div>
           ) : servicesData?.map((s, i) => {
-            const IconMap = Icons as unknown as Record<string, ElementType>;
-            const IconNode: ElementType = IconMap[s.icon] || Icons.Circle;
+            const IconNode: ElementType = ICON_REGISTRY[s.icon] || Circle;
             const title = isRTL ? (s.titleAr || s.title) : s.title;
             const badge = isRTL ? (s.badgeAr || s.badge) : s.badge;
             const desc = isRTL ? (s.descriptionAr || s.description) : s.description;

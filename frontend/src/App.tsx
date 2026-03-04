@@ -31,7 +31,16 @@ const AdminBlog = lazy(() => import("./pages/admin/AdminBlog"));
 const AdminAccount = lazy(() => import("./pages/admin/AdminAccount"));
 const RequireAuth = lazy(() => import("./components/admin/RequireAuth"));
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 5 * 60 * 1000,
+      gcTime: 10 * 60 * 1000,
+      retry: 1,
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 /* ── Scroll-to-top on navigation ── */
 const ScrollToTop = () => {
