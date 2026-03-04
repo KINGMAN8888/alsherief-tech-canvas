@@ -25,13 +25,13 @@ const NeuralBackground = () => {
       /* Scene setup */
       const scene = new THREE.Scene();
       sceneInstance = scene;
-      const camera = new THREE.PerspectiveCamera(60, el.clientWidth / el.clientHeight, 0.1, 2000);
+      const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 2000);
       camera.position.z = 350;
 
       const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
       rendererInstance = renderer;
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-      renderer.setSize(el.clientWidth, el.clientHeight);
+      renderer.setSize(window.innerWidth, window.innerHeight);
       renderer.setClearColor(0x000000, 0);
       el.appendChild(renderer.domElement);
 
@@ -117,9 +117,9 @@ const NeuralBackground = () => {
 
       /* Resize */
       const handleResize = () => {
-        camera.aspect = el.clientWidth / el.clientHeight;
+        camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();
-        renderer.setSize(el.clientWidth, el.clientHeight);
+        renderer.setSize(window.innerWidth, window.innerHeight);
       };
       window.addEventListener("resize", handleResize);
 

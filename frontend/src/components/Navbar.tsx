@@ -41,49 +41,33 @@ const Navbar = () => {
   const displayRole = profile?.headline || t("nav.role");
 
 
-  /* ── Optimized Scroll & Active Section (Prevents Forced Reflows) ── */
+  /* ── Scroll Appearance & Progress Bar (No Layout Thrashing) ── */
   useEffect(() => {
     let ticking = false;
     let cachedTotal = 0;
-    let cachedOffsets: { id: string; top: number }[] = [];
-    const ids = navLinks.map((l) => l.href.replace("#", ""));
 
-    const updateCache = () => {
+    const updateTotal = () => {
       cachedTotal = document.documentElement.scrollHeight - window.innerHeight;
-      cachedOffsets = ids.map(id => {
-        const el = document.getElementById(id);
-        // Fallback to 0 if not mounted yet (lazy loaded sections)
-        return { id, top: el ? el.offsetTop : Infinity };
-      });
     };
 
-    // Calculate cache initially, and re-calculate occasionally string lazy load completion
-    updateCache();
-    const timer1 = setTimeout(updateCache, 1500);
-    const timer2 = setTimeout(updateCache, 5000);
-    window.addEventListener("resize", updateCache, { passive: true });
+    // Calculate initially
+    updateTotal();
+
+    // Use ResizeObserver instead of arbitrary timeouts/resizes to safely refresh document height caching
+    let resizeObserver: ResizeObserver | null = null;
+    if (typeof ResizeObserver !== "undefined") {
+      resizeObserver = new ResizeObserver(() => updateTotal());
+      resizeObserver.observe(document.documentElement);
+    }
 
     const handleScroll = () => {
       if (!ticking) {
         window.requestAnimationFrame(() => {
           const scrollY = window.scrollY;
-
-          // 1. Update overall scroll appearance and progress
           setScrolled(scrollY > 40);
           const pct = cachedTotal > 0 ? (scrollY / cachedTotal) * 100 : 0;
           setScrollProgress(pct);
           document.documentElement.style.setProperty("--scroll-progress", `${pct}%`);
-
-          // 2. Update active section
-          const trigger = scrollY + window.innerHeight * 0.35;
-          let current = "";
-          for (const item of cachedOffsets) {
-            if (item.top !== Infinity && item.top <= trigger) {
-              current = item.id;
-            }
-          }
-          setActiveSection(current);
-
           ticking = false;
         });
         ticking = true;
@@ -93,9 +77,40 @@ const Navbar = () => {
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => {
       window.removeEventListener("scroll", handleScroll);
-      window.removeEventListener("resize", updateCache);
-      clearTimeout(timer1);
-      clearTimeout(timer2);
+      if (resizeObserver) resizeObserver.disconnect();
+    };
+  }, []);
+
+  /* ── Active Section via IntersectionObserver (Zero Reflows) ── */
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveSection(entry.target.id);
+          }
+        });
+      },
+      { rootMargin: "-30% 0px -60% 0px" }
+    );
+
+    const observeSections = () => {
+      navLinks.forEach((l) => {
+        const id = l.href.replace("#", "");
+        const el = document.getElementById(id);
+        if (el) observer.observe(el);
+      });
+    };
+
+    observeSections();
+
+    // Re-observe later to catch lazily loaded (Suspense) sections
+    const mutObserver = new MutationObserver(() => observeSections());
+    mutObserver.observe(document.body, { childList: true, subtree: true });
+
+    return () => {
+      observer.disconnect();
+      mutObserver.disconnect();
     };
   }, []);
 
