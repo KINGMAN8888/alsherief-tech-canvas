@@ -131,7 +131,15 @@ const AdminProjects = () => {
             if (current.id) { await updateProject.mutateAsync({ id: current.id, data }); toast.success("Project updated"); }
             else { await addProject.mutateAsync(data); toast.success("Project created"); }
             closeDrawer();
-        } catch { toast.error("Failed to save project"); }
+        } catch (error: any) {
+            console.error("Save error:", error.response?.data);
+            const details = error.response?.data?.details;
+            if (details && Array.isArray(details)) {
+                toast.error(`Validation error: ${details[0].field} - ${details[0].message}`);
+            } else {
+                toast.error(error.response?.data?.error || "Failed to save project");
+            }
+        }
     };
 
     const handleImageUpload = async (file?: File) => {
