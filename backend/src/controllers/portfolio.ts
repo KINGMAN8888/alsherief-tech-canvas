@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { prisma } from '../prisma';
 import logger from '../lib/logger';
 import cache, { CACHE_KEYS } from '../lib/cache';
-import { parseReadme } from '../lib/readmeParser';
+import { parseReadme, ParsedReadme } from '../lib/readmeParser';
 
 // ── Public Fetchers ───────────────────────────────────────────────────────────
 
@@ -176,7 +176,7 @@ export const fetchGithubRepo = async (req: Request, res: Response, next: NextFun
 
         // 3. README — fetch, decode from base64, and parse intelligently
         let readmeMarkdown = '';
-        let parsedReadme = { overview: '', longDescription: '', features: [] as string[], challenges: '', techDetails: '' };
+        let parsedReadme: ParsedReadme = { sections: [], overview: '', longDescription: '', features: [], challenges: '', techDetails: '' };
         try {
             const readmeRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/readme`, { headers });
             if (readmeRes.ok) {
