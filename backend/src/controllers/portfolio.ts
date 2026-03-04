@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { prisma } from '../prisma';
 import logger from '../lib/logger';
 import cache, { CACHE_KEYS } from '../lib/cache';
+import { parseReadme } from '../lib/readmeParser';
 
 // ── Public Fetchers ───────────────────────────────────────────────────────────
 
@@ -138,53 +139,84 @@ export const createBlogPost = handleCreate(prisma.blogPost, CACHE_KEYS.blog);
 export const updateBlogPost = handleUpdate(prisma.blogPost, CACHE_KEYS.blog);
 export const deleteBlogPost = handleDelete(prisma.blogPost, CACHE_KEYS.blog);
 
-// GitHub Fetcher ───────────────────────────────────────────────────────────────
+// ── GitHub Smart Fetcher ──────────────────────────────────────────────────────
+// Fetches repo metadata, languages, and README, parses README into structured
+// sections (overview, features, challenges, tech details), and returns everything.
 
 export const fetchGithubRepo = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { url } = req.body;
-        if (!url) {
-            res.status(400).json({ error: 'GitHub URL is required' });
-            return;
-        }
+        if (!url) { res.status(400).json({ error: 'GitHub URL is required' }); return; }
 
         const match = url.match(/github\.com\/([^/]+)\/([^/\s?#]+)/);
-        if (!match) {
-            res.status(400).json({ error: 'Invalid GitHub URL format' });
-            return;
-        }
+        if (!match) { res.status(400).json({ error: 'Invalid GitHub URL format' }); return; }
 
         const [, owner, repo] = match;
-        const fetchOptions: RequestInit = {
-            headers: { Accept: "application/vnd.github+json" },
-        };
+        const headers: Record<string, string> = { Accept: 'application/vnd.github+json' };
+        if (process.env.GITHUB_TOKEN) headers['Authorization'] = `Bearer ${process.env.GITHUB_TOKEN}`;
 
-        // Use token if available to access private repos
-        if (process.env.GITHUB_TOKEN) {
-            fetchOptions.headers = {
-                ...fetchOptions.headers,
-                Authorization: `Bearer ${process.env.GITHUB_TOKEN}`
-            };
-        }
-
-        const response = await fetch(`https://api.github.com/repos/${owner}/${repo}`, fetchOptions);
-
-        if (!response.ok) {
-            res.status(response.status).json({ error: 'Failed to fetch repository. May be private without a token.' });
+        // 1. Repo metadata
+        const repoRes = await fetch(`https://api.github.com/repos/${owner}/${repo}`, { headers });
+        if (!repoRes.ok) {
+            res.status(repoRes.status).json({ error: 'Repository not found or inaccessible.' });
             return;
         }
+        const repoData = await repoRes.json();
 
-        const data = await response.json();
+        // 2. Languages breakdown
+        let techStack: string[] = repoData.topics || [];
+        try {
+            const langRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/languages`, { headers });
+            if (langRes.ok) {
+                const langs = await langRes.json();
+                if (techStack.length === 0) techStack = Object.keys(langs);
+            }
+        } catch { /* ignore */ }
+        if (techStack.length === 0 && repoData.language) techStack = [repoData.language];
+
+        // 3. README — fetch, decode from base64, and parse intelligently
+        let readmeMarkdown = '';
+        let parsedReadme = { overview: '', longDescription: '', features: [] as string[], challenges: '', techDetails: '' };
+        try {
+            const readmeRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/readme`, { headers });
+            if (readmeRes.ok) {
+                const readmeData = await readmeRes.json();
+                readmeMarkdown = Buffer.from(readmeData.content, 'base64').toString('utf-8');
+                parsedReadme = parseReadme(readmeMarkdown);
+            }
+        } catch { /* no README, continue with basic info */ }
+
+        // 4. Build a pretty title from the repo name (e.g. "my-cool-project" -> "My Cool Project")
+        const prettyTitle = repoData.name
+            .replace(/[-_]/g, ' ')
+            .replace(/\b\w/g, (c: string) => c.toUpperCase());
+
         res.json({
-            name: data.name,
-            description: data.description || "",
-            html_url: data.html_url,
-            homepage: data.homepage,
-            owner: owner,
-            repo: repo,
-            topics: data.topics || [],
-            language: data.language
+            // Identifiers
+            name: repoData.name,
+            slug: repoData.name,
+            title: prettyTitle,
+            // Descriptions
+            description: repoData.description || parsedReadme.overview || '',
+            longDescription: parsedReadme.longDescription || repoData.description || '',
+            // Structured README sections
+            features: parsedReadme.features,
+            challenges: parsedReadme.challenges,
+            techDetails: parsedReadme.techDetails,
+            readmeRaw: readmeMarkdown.slice(0, 5000),
+            // Tech
+            tech: techStack,
+            language: repoData.language || '',
+            // Links
+            html_url: repoData.html_url,
+            homepage: repoData.homepage || '',
+            owner,
+            repo,
+            // GitHub stats
+            stars: repoData.stargazers_count || 0,
+            forks: repoData.forks_count || 0,
+            // Preview image (GitHub's OG image)
+            image: `https://opengraph.githubassets.com/1/${owner}/${repo}`,
         });
     } catch (error) { next(error); }
 };
-

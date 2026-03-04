@@ -10,6 +10,13 @@ interface Project {
     slug: string;
     title?: string;
     description?: string;
+    longDescription?: string;
+    features?: string[];
+    challenges?: string;
+    techDetails?: string;
+    language?: string;
+    stars?: number;
+    forks?: number;
     emoji: string;
     tech: string[];
     link?: string;
@@ -18,7 +25,7 @@ interface Project {
     color: string;
 }
 
-const emptyProject: Partial<Project> = { slug: "", title: "", description: "", emoji: "", tech: [], link: "", github: "", image: "", color: "" };
+const emptyProject: Partial<Project> = { slug: "", title: "", description: "", longDescription: "", features: [], challenges: "", techDetails: "", emoji: "", tech: [], link: "", github: "", image: "", color: "" };
 
 const AdminProjects = () => {
     const { data: projects, isLoading } = useApiQuery<Project>("projects");
@@ -52,12 +59,19 @@ const AdminProjects = () => {
             setCurrent(prev => ({
                 ...prev,
                 slug: data.name,
-                title: data.name,
+                title: data.title || data.name,
                 description: data.description || prev.description || "",
+                longDescription: data.longDescription || "",
+                features: Array.isArray(data.features) ? data.features : [],
+                challenges: data.challenges || "",
+                techDetails: data.techDetails || "",
+                language: data.language || "",
+                stars: data.stars || 0,
+                forks: data.forks || 0,
                 github: data.html_url,
                 link: data.homepage || "",
-                image: `https://opengraph.githubassets.com/1/${data.owner}/${data.repo}`,
-                tech,
+                image: data.image || `https://opengraph.githubassets.com/1/${data.owner}/${data.repo}`,
+                tech: Array.isArray(data.tech) ? data.tech : [],
                 emoji: prev.emoji || "💻",
                 color: prev.color || "from-slate-700 to-slate-900",
             }));

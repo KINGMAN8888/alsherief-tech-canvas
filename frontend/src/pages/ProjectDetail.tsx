@@ -32,7 +32,7 @@ const ProjectDetail = () => {
 
   const project = allProjects?.find((p: any) => p.slug === slug);
 
-  // For projects from the DB, use DB fields. For legacy static projects, fallback to i18n.
+  // For projects from the DB, use DB fields first. Fall back to i18n for legacy static projects.
   const projectTitle = project
     ? ((loc === "ar" && project.titleAr) ? project.titleAr : project.title || t(`projects.items.${slug}.title`, { defaultValue: project.slug }))
     : (slug ? t(`projects.items.${slug}.title`, { defaultValue: slug ?? "" }) : "");
@@ -41,13 +41,20 @@ const ProjectDetail = () => {
     ? ((loc === "ar" && project.descriptionAr) ? project.descriptionAr : project.description || t(`projects.items.${slug}.description`, { defaultValue: "" }))
     : (slug ? t(`projects.items.${slug}.description`, { defaultValue: "" }) : "");
 
-  const projectLongDescription = slug ? t(`projects.items.${slug}.longDescription`, { defaultValue: projectDescription }) : "";
-  const rawFeatures = slug
-    ? t(`projects.items.${slug}.features`, { returnObjects: true, defaultValue: [] })
-    : [];
-  const projectFeatures: string[] = Array.isArray(rawFeatures) ? rawFeatures : [];
-  const projectChallenges = slug ? t(`projects.items.${slug}.challenges`, { defaultValue: "" }) : "";
-  const projectTechDetails = slug ? t(`projects.items.${slug}.techDetails`, { defaultValue: "" }) : "";
+  // Rich content: DB fields win over i18n, i18n wins over empty
+  const i18nLongDesc = slug ? t(`projects.items.${slug}.longDescription`, { defaultValue: "" }) : "";
+  const projectLongDescription = (project?.longDescription) || i18nLongDesc || projectDescription;
+
+  const i18nRawFeatures = slug ? t(`projects.items.${slug}.features`, { returnObjects: true, defaultValue: [] }) : [];
+  const i18nFeatures: string[] = Array.isArray(i18nRawFeatures) ? i18nRawFeatures : [];
+  const dbFeatures: string[] = Array.isArray(project?.features) ? (project.features as string[]) : [];
+  const projectFeatures: string[] = dbFeatures.length > 0 ? dbFeatures : i18nFeatures;
+
+  const projectChallenges = project?.challenges
+    || (slug ? t(`projects.items.${slug}.challenges`, { defaultValue: "" }) : "");
+  const projectTechDetails = project?.techDetails
+    || (slug ? t(`projects.items.${slug}.techDetails`, { defaultValue: "" }) : "");
+
 
   if (isLoading) {
     return (

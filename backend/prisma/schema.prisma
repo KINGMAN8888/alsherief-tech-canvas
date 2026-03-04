@@ -29,8 +29,16 @@ model Project {
   slug           String   @unique
   title          String?
   titleAr        String?
-  description    String?
+  description    String?  // Short one-liner
   descriptionAr  String?
+  longDescription String? // Auto-parsed from README intro
+  features       Json?    // String[] from README features section
+  challenges     String?  // From README challenges section
+  techDetails    String?  // From README tech/architecture section
+  readmeRaw      String?  // Raw README markdown
+  language       String?  // Primary programming language
+  stars          Int?     // GitHub stars
+  forks          Int?     // GitHub forks
   emoji          String
   tech           String[]
   link           String?
