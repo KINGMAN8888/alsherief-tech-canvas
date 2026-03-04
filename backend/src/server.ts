@@ -2,6 +2,7 @@ import express, { Request, Response } from 'express';
 import path from 'path';
 import cors from 'cors';
 import helmet from 'helmet';
+import compression from 'compression';
 import rateLimit from 'express-rate-limit';
 import dotenv from 'dotenv';
 import { prisma } from './prisma';
@@ -20,7 +21,7 @@ const port = process.env.PORT || 5000;
 // ── Security Headers (Helmet) ──────────────────────────────────────────────────
 app.use(helmet());
 
-// ── CORS ───────────────────────────────────────────────────────────────────────
+// ── Cors ───────────────────────────────────────────────────────────────────────
 const allowedOrigins = (process.env.CORS_ORIGINS ?? 'http://localhost:8080,http://localhost:5173')
     .split(',')
     .map((o) => o.trim().replace(/^["']|["']$/g, '').replace(/\/$/, ''));
@@ -38,6 +39,9 @@ app.use(
         credentials: true,
     })
 );
+
+// ── Compression ────────────────────────────────────────────────────────────────
+app.use(compression());
 
 // ── Body Parser ────────────────────────────────────────────────────────────────
 app.use(express.json({ limit: '2mb' }));

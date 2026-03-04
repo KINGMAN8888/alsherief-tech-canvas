@@ -3,22 +3,23 @@ import { Helmet } from "react-helmet-async";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 
+// Standard imports for initial viewport (Hero, About, Navbar)
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import NeuralBackground from "@/components/NeuralBackground";
 import About from "@/components/About";
-import Footer from "@/components/Footer";
 import CustomCursor from "@/components/CustomCursor";
 
-// Standard imports instead of lazy loading to ensure all section IDs are present for native hash scrolling
-import Services from "@/components/Services";
-import Experience from "@/components/Experience";
-import Projects from "@/components/Projects";
-import Education from "@/components/Education";
-import Certifications from "@/components/Certifications";
-import Skills from "@/components/Skills";
-import Blog from "@/components/Blog";
-import Contact from "@/components/Contact";
+// Lazy-loaded components for below-the-fold
+const Services = React.lazy(() => import("@/components/Services"));
+const Experience = React.lazy(() => import("@/components/Experience"));
+const Projects = React.lazy(() => import("@/components/Projects"));
+const Education = React.lazy(() => import("@/components/Education"));
+const Certifications = React.lazy(() => import("@/components/Certifications"));
+const Skills = React.lazy(() => import("@/components/Skills"));
+const Blog = React.lazy(() => import("@/components/Blog"));
+const Contact = React.lazy(() => import("@/components/Contact"));
+const Footer = React.lazy(() => import("@/components/Footer"));
 
 const Index = () => {
   const { t } = useTranslation();
