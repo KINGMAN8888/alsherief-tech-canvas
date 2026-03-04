@@ -21,13 +21,13 @@ export const createMessageSchema = z.object({
 // ─── Project ─────────────────────────────────────────────────────────────────
 
 export const createProjectSchema = z.object({
-    title: z.string({ error: 'Title is required' }).min(1),
+    title: z.string().optional(),
     titleAr: z.string().optional(),
     slug: z
         .string({ error: 'Slug is required' })
         .min(1)
-        .regex(/^[a-z0-9-]+$/, 'Slug must be lowercase alphanumeric with hyphens'),
-    description: z.string({ error: 'Description is required' }).min(1),
+        .regex(/^[a-zA-Z0-9._-]+$/, 'Slug must be alphanumeric with hyphens, dots or underscores'),
+    description: z.string().optional(),
     descriptionAr: z.string().optional(),
     emoji: z.string().optional(),
     tech: z.array(z.string()).optional().default([]),
