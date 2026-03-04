@@ -75,7 +75,7 @@ const AdminLogin = () => {
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                     className="w-full bg-slate-900/60 border border-slate-700/50 rounded-xl py-3 pl-10 pr-4 text-white font-cairo text-sm placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500/50 transition-all font-sans"
-                                    placeholder="admin@techcanvas.io"
+                                    placeholder="admin@youssefalsherief.tech"
                                     required
                                 />
                             </div>
