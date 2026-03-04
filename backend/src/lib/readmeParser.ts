@@ -1,7 +1,18 @@
-// Smart README parser: splits markdown into structured sections
-// and extracts overview, features, challenges, and tech details.
+// Smart README parser — extracts ALL sections with their real headings.
+// Returns structured data for dynamic rendering.
 
-interface ParsedReadme {
+export interface ReadmeSection {
+    heading: string;     // The actual heading text from the README
+    level: number;       // Heading level (1, 2, 3)
+    content: string;     // Raw markdown content
+    bullets: string[];   // Extracted bullet points (if any)
+    prose: string;       // Cleaned prose text
+    isBulletList: boolean;
+}
+
+export interface ParsedReadme {
+    sections: ReadmeSection[];
+    // Convenience fields for backward compat
     overview: string;
     longDescription: string;
     features: string[];
@@ -9,151 +20,155 @@ interface ParsedReadme {
     techDetails: string;
 }
 
-// Keywords to match section headings (case-insensitive)
-const FEATURE_PATTERNS = /feature|what|functionality|highlights|capabilities|includes|offers|what.+do/i;
-const CHALLENGE_PATTERNS = /challenge|issue|difficulty|problem|limitation|known.bug|todo|roadmap/i;
-const TECH_PATTERNS = /tech|stack|built.with|architecture|dependencies|prerequisit|requirement|technology|framework|installation|setup|getting.started|how.+work/i;
-const OVERVIEW_PATTERNS = /overview|about|introduction|intro|description|summary|what.+is/i;
-
+// Strip markdown syntax to get clean readable text
 function stripMarkdown(text: string): string {
     return text
-        .replace(/!\[.*?\]\(.*?\)/g, '')       // remove images
-        .replace(/\[([^\]]+)\]\(.*?\)/g, '$1')  // replace links with text
-        .replace(/`{1,3}[^`]*`{1,3}/g, '')      // remove inline code
-        .replace(/^#{1,6}\s*/gm, '')             // remove headings
-        .replace(/\*{1,2}([^*]+)\*{1,2}/g, '$1')// bold/italic
-        .replace(/_{1,2}([^_]+)_{1,2}/g, '$1')  // underscore bold/italic
-        .replace(/^\s*[-*+]\s*/gm, '• ')        // normalize bullet points
-        .replace(/^\s*\d+\.\s*/gm, '• ')        // normalize numbered lists
-        .replace(/^\s*>\s*/gm, '')               // remove blockquotes
-        .replace(/\r\n/g, '\n')
+        .replace(/!\[.*?\]\(.*?\)/g, '')          // remove images
+        .replace(/\[([^\]]+)\]\(.*?\)/g, '$1')    // links → text
+        .replace(/`{3}[\s\S]*?`{3}/gm, '')        // code blocks
+        .replace(/`([^`]+)`/g, '$1')              // inline code
+        .replace(/^#{1,6}\s*/gm, '')              // headings
+        .replace(/\*{2}([^*]+)\*{2}/g, '$1')      // bold
+        .replace(/\*([^*]+)\*/g, '$1')            // italic
+        .replace(/_{2}([^_]+)_{2}/g, '$1')        // bold underscore
+        .replace(/_([^_]+)_/g, '$1')              // italic underscore
+        .replace(/^\s*>\s*/gm, '')                // blockquotes
+        .replace(/\[x\]|\[ \]/gi, '')             // checkboxes
+        .replace(/<!--[\s\S]*?-->/g, '')          // HTML comments
+        .replace(/<[^>]+>/g, '')                  // HTML tags
+        // Remove badges (shield.io patterns)
+        .replace(/\[!\[.*?\]\(https?:\/\/.*?badge.*?\)\]\(.*?\)/gi, '')
         .replace(/\n{3,}/g, '\n\n')
         .trim();
 }
 
+// Extract bullet points from markdown content
 function extractBullets(text: string): string[] {
-    const lines = text.split('\n');
     const bullets: string[] = [];
+    const lines = text.split('\n');
     for (const line of lines) {
-        const trimmed = line.trim();
-        // Match markdown list items (-, *, +, 1.)
-        const match = trimmed.match(/^[-*+]\s+(.+)|^\d+\.\s+(.+)/);
+        const match = line.trim().match(/^[-*+]\s+(.+)|^\d+\.\s+(.+)/);
         if (match) {
-            const bullet = (match[1] || match[2]).replace(/\*{1,2}([^*]+)\*{1,2}/g, '$1').trim();
-            if (bullet.length > 10) {
-                bullets.push(bullet);
-            }
+            let bullet = (match[1] || match[2])
+                .replace(/\*{2}([^*]+)\*{2}/g, '$1')
+                .replace(/\*([^*]+)\*/g, '$1')
+                .replace(/`([^`]+)`/g, '$1')
+                .trim();
+            if (bullet.length > 5) bullets.push(bullet);
         }
     }
     return bullets;
 }
 
-function sectionsToProse(sectionContent: string): string {
-    // Extract paragraphs from a section (non-bullet-list lines)
-    const lines = sectionContent.split('\n');
-    const paragraphs: string[] = [];
+// Extract clean prose paragraphs (exclude bullets and headings)
+function extractProse(text: string): string {
+    const lines = text.split('\n');
+    const paras: string[] = [];
     let current = '';
 
     for (const line of lines) {
         const trimmed = line.trim();
-        // Skip bullet points and headers
-        if (trimmed.match(/^[-*+]\s/) || trimmed.match(/^\d+\.\s/) || trimmed.startsWith('#')) {
-            if (current) { paragraphs.push(current.trim()); current = ''; }
+        if (!trimmed || trimmed.match(/^[-*+]\s/) || trimmed.match(/^\d+\.\s/) || trimmed.startsWith('#')) {
+            if (current) { paras.push(current.trim()); current = ''; }
             continue;
         }
-        if (trimmed === '') {
-            if (current) { paragraphs.push(current.trim()); current = ''; }
-        } else {
-            current += (current ? ' ' : '') + trimmed;
-        }
+        current += (current ? ' ' : '') + trimmed;
     }
-    if (current) paragraphs.push(current.trim());
+    if (current) paras.push(current.trim());
 
-    return paragraphs.filter(p => p.length > 20).join('\n\n');
+    return stripMarkdown(paras.filter(p => p.length > 10).join('\n\n')).slice(0, 1500);
 }
 
+// Sections to SKIP (installation, license, badge-only sections, etc.)
+const SKIP_PATTERNS = /^(installation|getting.started|license|contributing|changelog|credits|acknowledgment|badge|copyright|contact|author|prerequisit|how.to.run|setup|clone|npm|yarn|docker.compose)/i;
+
+// Sections we consider "intro" (no heading or top-level title)
+const INTRO_PATTERNS = /^(overview|about|introduction|intro|description|summary|what.+is|project)/i;
+
 export function parseReadme(markdown: string): ParsedReadme {
-    // Split by level 2 headings (## Heading)
-    const sectionRegex = /^#{1,3}\s+(.+)$/gm;
-    const sections: Array<{ heading: string; content: string }> = [];
+    if (!markdown.trim()) {
+        return { sections: [], overview: '', longDescription: '', features: [], challenges: '', techDetails: '' };
+    }
 
-    let lastIndex = 0;
-    let lastHeading = '__intro__';
-    let match;
+    // Remove leading badges / shields block before any real content
+    const cleanedMarkdown = markdown
+        .replace(/(?:!\[.*?\]\(https?:\/\/[^\)]*\)\s*)+\n*/g, '')
+        .replace(/<!--[\s\S]*?-->/g, '');
 
-    const lines = markdown.split('\n');
-    let currentHeading = '__intro__';
+    const lines = cleanedMarkdown.split('\n');
+    const rawSections: Array<{ heading: string; level: number; lines: string[] }> = [];
+    let currentHeading = '';
+    let currentLevel = 0;
     let currentLines: string[] = [];
 
     for (const line of lines) {
-        const headingMatch = line.match(/^#{1,3}\s+(.+)$/);
+        const headingMatch = line.match(/^(#{1,4})\s+(.+)$/);
         if (headingMatch) {
-            sections.push({ heading: currentHeading, content: currentLines.join('\n') });
-            currentHeading = headingMatch[1].trim();
+            if (currentLines.join('').trim()) {
+                rawSections.push({ heading: currentHeading, level: currentLevel, lines: currentLines });
+            }
+            currentHeading = headingMatch[2].trim().replace(/[`*_]/g, '');
+            currentLevel = headingMatch[1].length;
             currentLines = [];
         } else {
             currentLines.push(line);
         }
     }
-    sections.push({ heading: currentHeading, content: currentLines.join('\n') });
-
-    const result: ParsedReadme = {
-        overview: '',
-        longDescription: '',
-        features: [],
-        challenges: '',
-        techDetails: '',
-    };
-
-    for (const section of sections) {
-        const heading = section.heading.toLowerCase();
-        const content = section.content.trim();
-        if (!content) continue;
-
-        if (section.heading === '__intro__' || OVERVIEW_PATTERNS.test(heading)) {
-            // Intro section: first paragraphs before any heading
-            const prose = sectionsToProse(content);
-            if (prose && !result.longDescription) {
-                result.longDescription = stripMarkdown(prose).slice(0, 2000);
-            }
-            // Short overview: first sentence or paragraph
-            if (!result.overview) {
-                const firstParagraph = prose.split('\n')[0] || '';
-                result.overview = stripMarkdown(firstParagraph).slice(0, 500);
-            }
-        }
-
-        if (FEATURE_PATTERNS.test(heading)) {
-            const bullets = extractBullets(content);
-            if (bullets.length > 0) {
-                result.features = [...result.features, ...bullets].slice(0, 15);
-            } else {
-                // Try to extract sentences as features
-                const prose = sectionsToProse(content);
-                const sentences = prose.split('. ').filter(s => s.length > 20).slice(0, 6);
-                result.features = [...result.features, ...sentences].slice(0, 15);
-            }
-        }
-
-        if (CHALLENGE_PATTERNS.test(heading)) {
-            const prose = sectionsToProse(content);
-            if (prose && !result.challenges) {
-                result.challenges = stripMarkdown(prose).slice(0, 1500);
-            }
-        }
-
-        if (TECH_PATTERNS.test(heading)) {
-            const bullets = extractBullets(content);
-            const prose = sectionsToProse(content);
-            const combined = [
-                prose ? stripMarkdown(prose).slice(0, 800) : '',
-                bullets.length > 0 ? bullets.join(' · ') : '',
-            ].filter(Boolean).join('\n\n');
-            if (combined && !result.techDetails) {
-                result.techDetails = combined.slice(0, 1500);
-            }
-        }
+    if (currentLines.join('').trim()) {
+        rawSections.push({ heading: currentHeading, level: currentLevel, lines: currentLines });
     }
 
-    return result;
+    const sections: ReadmeSection[] = [];
+    let overview = '';
+    let longDescription = '';
+    let features: string[] = [];
+    let challenges = '';
+    let techDetails = '';
+
+    for (const raw of rawSections) {
+        const content = raw.lines.join('\n').trim();
+        if (!content) continue;
+
+        const headingLower = raw.heading.toLowerCase();
+
+        // Skip noise sections
+        if (raw.heading && SKIP_PATTERNS.test(headingLower)) continue;
+
+        // Skip very short sections (< 30 chars of real content)
+        const stripped = stripMarkdown(content);
+        if (stripped.length < 20 && raw.heading) continue;
+
+        const bullets = extractBullets(content);
+        const prose = extractProse(content);
+        const isBulletList = bullets.length >= 2;
+
+        const section: ReadmeSection = {
+            heading: raw.heading || '',
+            level: raw.level,
+            content,
+            bullets,
+            prose,
+            isBulletList,
+        };
+
+        // Fill convenience fields
+        if (!raw.heading || INTRO_PATTERNS.test(headingLower)) {
+            if (!longDescription) longDescription = prose;
+            if (!overview) overview = prose.split('\n')[0].slice(0, 500);
+        }
+
+        if (/feature|highlight|capabilit|what.+offer|what.+do|function/i.test(headingLower)) {
+            if (features.length === 0) features = isBulletList ? bullets : prose.split('. ').filter(s => s.length > 20);
+        }
+        if (/challenge|problem|difficult|issue|limitation/i.test(headingLower)) {
+            if (!challenges) challenges = prose;
+        }
+        if (/tech|stack|built.with|architect|tool|framework|technology/i.test(headingLower)) {
+            if (!techDetails) techDetails = isBulletList ? bullets.join(' · ') : prose;
+        }
+
+        sections.push(section);
+    }
+
+    return { sections, overview, longDescription, features, challenges, techDetails };
 }

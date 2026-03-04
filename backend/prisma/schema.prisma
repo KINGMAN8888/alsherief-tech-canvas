@@ -33,6 +33,7 @@ model Project {
   descriptionAr  String?
   longDescription String? // Auto-parsed from README intro
   features       Json?    // String[] from README features section
+  sections       Json?    // Full array of parsed README sections [{heading,bullets,prose,isBulletList}]
   challenges     String?  // From README challenges section
   techDetails    String?  // From README tech/architecture section
   readmeRaw      String?  // Raw README markdown

@@ -199,7 +199,8 @@ export const fetchGithubRepo = async (req: Request, res: Response, next: NextFun
             // Descriptions
             description: repoData.description || parsedReadme.overview || '',
             longDescription: parsedReadme.longDescription || repoData.description || '',
-            // Structured README sections
+            // Structured README sections (real headings, bullets, prose)
+            sections: parsedReadme.sections,
             features: parsedReadme.features,
             challenges: parsedReadme.challenges,
             techDetails: parsedReadme.techDetails,
