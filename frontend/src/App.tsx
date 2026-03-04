@@ -4,6 +4,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import api from "@/lib/api";
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "next-themes";
@@ -40,6 +41,19 @@ const queryClient = new QueryClient({
       refetchOnWindowFocus: false,
     },
   },
+});
+
+// Kick off the profile fetch at module-init time (before React renders).
+// By the time Hero mounts and calls useProfile(), data is cached or in-flight,
+// eliminating the API connection wait from the LCP critical path.
+queryClient.prefetchQuery({
+  queryKey: ["profile"],
+  queryFn: async () => {
+    const res = await api.get("/portfolio/profile");
+    const arr = Array.isArray(res.data) ? res.data : [res.data];
+    return arr[0] ?? null;
+  },
+  staleTime: 5 * 60 * 1000,
 });
 
 /* ── Scroll-to-top on navigation ── */

@@ -158,21 +158,15 @@ const Navbar = () => {
 
   return (
     <>
-      <motion.nav
-        initial={{ y: -80, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.5, ease: "easeOut" }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled
+      <nav
+        className={`navbar-enter fixed top-0 left-0 right-0 z-50 transition-[background-color,backdrop-filter,border-color,box-shadow] duration-300 ${scrolled
           ? "bg-[#020810]/90 backdrop-blur-xl border-b border-slate-800/60 shadow-[0_4px_32px_rgba(0,0,0,0.5)]"
           : "bg-transparent"
           }`}
       >
         {/* Scroll progress bar */}
         <div className="absolute top-0 left-0 right-0 h-[2px] bg-slate-800/40">
-          <motion.div
-            className="h-full bg-gradient-to-r from-cyan-500 via-blue-500 to-violet-500 nav-progress"
-            transition={{ duration: 0.1 }}
-          />
+          <div className="h-full bg-gradient-to-r from-cyan-500 via-blue-500 to-violet-500 nav-progress" />
         </div>
 
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6 md:px-8 py-3">
@@ -204,10 +198,8 @@ const Navbar = () => {
                   }`}
               >
                 {isActive(l.href) && (
-                  <motion.span
-                    layoutId="nav-active"
+                  <span
                     className="absolute inset-0 rounded-lg bg-cyan-500/10 border border-cyan-500/20"
-                    transition={{ type: "spring", stiffness: 400, damping: 35 }}
                   />
                 )}
                 <span className="relative z-10">{t(`nav.${l.key}`)}</span>
@@ -222,7 +214,7 @@ const Navbar = () => {
             <div className="relative">
               <button
                 onClick={(e) => { e.stopPropagation(); setLangOpen(!langOpen); }}
-                className="inline-flex h-9 items-center gap-1.5 rounded-xl border border-slate-700/60 bg-slate-800/50 px-3 font-rajdhani text-sm font-bold text-slate-300 transition-all duration-200 hover:border-slate-600 hover:text-white"
+                className="inline-flex h-9 items-center gap-1.5 rounded-xl border border-slate-700/60 bg-slate-800/50 px-3 font-rajdhani text-sm font-bold text-slate-300 transition-[border-color,color] duration-200 hover:border-slate-600 hover:text-white"
                 aria-label="Switch language"
               >
                 <Globe className="h-3.5 w-3.5 text-cyan-400/70" />
@@ -265,7 +257,7 @@ const Navbar = () => {
               href="/assets/cv.pdf"
               target="_blank"
               rel="noopener noreferrer"
-              className="group inline-flex h-9 items-center gap-2 rounded-xl border border-cyan-500/30 bg-cyan-500/10 px-4 font-rajdhani text-sm font-bold uppercase tracking-wider text-cyan-400 transition-all duration-300 hover:bg-cyan-500/20 hover:border-cyan-400/50 hover:shadow-[0_0_20px_rgba(6,182,212,0.2)]"
+              className="group inline-flex h-9 items-center gap-2 rounded-xl border border-cyan-500/30 bg-cyan-500/10 px-4 font-rajdhani text-sm font-bold uppercase tracking-wider text-cyan-400 transition-[background-color,border-color,box-shadow] duration-300 hover:bg-cyan-500/20 hover:border-cyan-400/50 hover:shadow-[0_0_20px_rgba(6,182,212,0.2)]"
             >
               <Download className="h-3.5 w-3.5" />
               {t("nav.downloadCv")}
@@ -281,7 +273,7 @@ const Navbar = () => {
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
         </div>
-      </motion.nav>
+      </nav>
 
       {/* ── Mobile Menu Overlay ── */}
       <AnimatePresence>
@@ -333,7 +325,7 @@ const Navbar = () => {
                       initial={{ opacity: 0, x: 20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: i * 0.04, duration: 0.3 }}
-                      className={`flex items-center justify-between rounded-xl px-4 py-3 font-rajdhani text-base font-semibold tracking-wide transition-all duration-200 ${isActive(l.href)
+                      className={`flex items-center justify-between rounded-xl px-4 py-3 font-rajdhani text-base font-semibold tracking-wide transition-[background-color,color] duration-200 ${isActive(l.href)
                         ? "bg-cyan-500/10 border border-cyan-500/20 text-cyan-400"
                         : "text-slate-400 hover:bg-slate-800/60 hover:text-white"
                         }`}
@@ -355,7 +347,7 @@ const Navbar = () => {
                       <button
                         key={lang.code}
                         onClick={() => switchLocale(lang.code)}
-                        className={`flex-1 flex items-center justify-center gap-1.5 rounded-lg border py-2 font-rajdhani text-xs font-bold transition-all duration-150 ${locale === lang.code
+                        className={`flex-1 flex items-center justify-center gap-1.5 rounded-lg border py-2 font-rajdhani text-xs font-bold transition-[border-color,color] duration-150 ${locale === lang.code
                           ? "border-cyan-500/30 bg-cyan-500/10 text-cyan-400"
                           : "border-slate-700/60 text-slate-400 hover:border-slate-600 hover:text-white"
                           }`}

@@ -126,22 +126,29 @@ const NeuralBackground = () => {
 
       /* Animation loop */
       let frame = 0;
+      const FRAME_INTERVAL = 1000 / 30; // target 30fps — halves rAF main-thread cost
+      let lastTime = 0;
 
-      const animate = () => {
+      const animate = (timestamp = 0) => {
         if (!mounted) return;
         animId = requestAnimationFrame(animate);
+
+        // When called from rAF (timestamp > 0), skip frames to maintain ~30fps.
+        // When called directly (resume after tab-hide, scene init), always render.
+        if (timestamp > 0 && timestamp - lastTime < FRAME_INTERVAL) return;
+        lastTime = timestamp;
         frame++;
 
         const pos = geo.attributes.position.array as Float32Array;
 
-        /* Gentle camera drift following mouse */
-        camera.position.x += (mouseRef.current.x * 30 - camera.position.x) * 0.018;
-        camera.position.y += (mouseRef.current.y * 20 - camera.position.y) * 0.018;
+        /* Gentle camera drift following mouse — factor doubled to compensate for 30fps cap */
+        camera.position.x += (mouseRef.current.x * 30 - camera.position.x) * 0.036;
+        camera.position.y += (mouseRef.current.y * 20 - camera.position.y) * 0.036;
         camera.lookAt(scene.position);
 
-        /* Slow rotation of entire group */
-        points.rotation.y += 0.0008;
-        lineMat.rotation.y += 0.0008;
+        /* Slow rotation of entire group — doubled per-frame delta to compensate for 30fps cap */
+        points.rotation.y += 0.0016;
+        lineMat.rotation.y += 0.0016;
 
         /* Update particles */
         for (let i = 0; i < COUNT; i++) {
@@ -201,6 +208,7 @@ const NeuralBackground = () => {
         if (document.visibilityState === "hidden") {
           cancelAnimationFrame(animId);
         } else {
+          lastTime = 0; // reset so first frame after resume always renders
           animate();
         }
       };

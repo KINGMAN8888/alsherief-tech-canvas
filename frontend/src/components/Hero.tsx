@@ -345,7 +345,7 @@ const Hero = () => {
                       {s.label}
                     </span>
                     {/* bottom accent line */}
-                    <div className="absolute bottom-0 left-1/2 -translate-x-1/2 h-[1px] w-0 group-hover/social:w-3/4 transition-all duration-400 rounded-full hero-social-accent" />
+                    <div className="absolute bottom-0 left-1/2 -translate-x-1/2 h-[1px] w-3/4 scale-x-0 group-hover/social:scale-x-100 origin-center transition-transform duration-400 rounded-full hero-social-accent" />
                   </motion.a>
                 )
               })}
@@ -370,7 +370,7 @@ const Hero = () => {
                   <span className="font-rajdhani text-[10px] uppercase tracking-widest text-slate-600">
                     {t(s.labelKey)}
                   </span>
-                  <div className="absolute bottom-0 left-1/2 -translate-x-1/2 h-[1px] w-0 bg-gradient-to-r from-cyan-500 to-violet-500 group-hover:w-3/4 transition-all duration-500 rounded-full" />
+                  <div className="absolute bottom-0 left-1/2 -translate-x-1/2 h-[1px] w-3/4 bg-gradient-to-r from-cyan-500 to-violet-500 scale-x-0 group-hover:scale-x-100 origin-center transition-transform duration-500 rounded-full" />
                 </div>
               ))}
             </motion.div>
@@ -385,9 +385,9 @@ const Hero = () => {
               {/* Primary */}
               <a
                 href="#projects"
-                className="hero-btn-primary group relative w-full sm:w-auto inline-flex h-13 items-center justify-center gap-2.5 overflow-hidden rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 px-7 font-rajdhani text-sm font-bold uppercase tracking-widest text-white transition-all duration-300 hover:shadow-[0_0_35px_rgba(6,182,212,0.45)] hover:scale-[1.02]"
+                className="hero-btn-primary group relative w-full sm:w-auto inline-flex h-13 items-center justify-center gap-2.5 overflow-hidden rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 px-7 font-rajdhani text-sm font-bold uppercase tracking-widest text-white transition-[transform,box-shadow] duration-300 hover:shadow-[0_0_35px_rgba(6,182,212,0.45)] hover:scale-[1.02]"
               >
-                <span className="absolute inset-0 bg-gradient-to-r from-white/0 to-white/0 group-hover:from-white/5 group-hover:to-white/10 transition-all duration-500" />
+                <span className="absolute inset-0 bg-gradient-to-r from-white/5 to-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 <span className="relative z-10 flex items-center gap-2">
                   {t("hero.viewProjects")}
                   <ArrowDown className="h-4 w-4 transition-transform duration-300 group-hover:translate-y-0.5" />
@@ -397,7 +397,7 @@ const Hero = () => {
               {/* Secondary */}
               <a
                 href="#contact"
-                className="hero-btn-secondary group relative w-full sm:w-auto inline-flex h-13 items-center justify-center gap-2.5 overflow-hidden rounded-xl border border-slate-700/80 bg-slate-900/50 px-7 font-rajdhani text-sm font-bold uppercase tracking-widest text-slate-300 backdrop-blur-sm transition-all duration-300 hover:border-cyan-500/40 hover:text-white hover:shadow-[0_0_25px_rgba(6,182,212,0.15)] hover:scale-[1.02]"
+                className="hero-btn-secondary group relative w-full sm:w-auto inline-flex h-13 items-center justify-center gap-2.5 overflow-hidden rounded-xl border border-slate-700/80 bg-slate-900/50 px-7 font-rajdhani text-sm font-bold uppercase tracking-widest text-slate-300 backdrop-blur-sm transition-[transform,box-shadow,border-color,color] duration-300 hover:border-cyan-500/40 hover:text-white hover:shadow-[0_0_25px_rgba(6,182,212,0.15)] hover:scale-[1.02]"
               >
                 <span className="relative z-10 flex items-center gap-2">
                   {t("hero.contactMe")}
