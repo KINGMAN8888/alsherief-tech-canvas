@@ -25,16 +25,20 @@ model User {
 }
 
 model Project {
-  id        String   @id @default(uuid())
-  slug      String   @unique
-  emoji     String
-  tech      String[]
-  link      String?
-  github    String?
-  image     String
-  color     String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id             String   @id @default(uuid())
+  slug           String   @unique
+  title          String?
+  titleAr        String?
+  description    String?
+  descriptionAr  String?
+  emoji          String
+  tech           String[]
+  link           String?
+  github         String?
+  image          String
+  color          String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 
   @@index([createdAt(sort: Desc)])
 }

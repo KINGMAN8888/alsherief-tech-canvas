@@ -177,6 +177,7 @@ export const fetchGithubRepo = async (req: Request, res: Response, next: NextFun
         const data = await response.json();
         res.json({
             name: data.name,
+            description: data.description || "",
             html_url: data.html_url,
             homepage: data.homepage,
             owner: owner,

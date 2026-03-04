@@ -95,13 +95,13 @@ const Projects = () => {
             <div className="text-cyan-400 py-12 flex justify-center animate-pulse tracking-widest font-rajdhani uppercase text-sm">Loading Projects Data...</div>
           ) : projects.map((p, i) => {
             // Use DB fields directly if they exist, fallback to translation keys for legacy data
-            const title = p.title_en && locale === 'ar' && p.title_ar
-              ? p.title_ar
-              : p.title_en || t(`projects.items.${p.slug}.title`, p.slug || 'Project');
+            const title = (locale === 'ar' && p.titleAr)
+              ? p.titleAr
+              : p.title || t(`projects.items.${p.slug}.title`, { defaultValue: p.slug || 'Project' });
 
-            const description = p.description_en && locale === 'ar' && p.description_ar
-              ? p.description_ar
-              : p.description_en || t(`projects.items.${p.slug}.description`, 'No description available.');
+            const description = (locale === 'ar' && p.descriptionAr)
+              ? p.descriptionAr
+              : p.description || t(`projects.items.${p.slug}.description`, { defaultValue: 'No description available.' });
             return (
               <motion.div
                 key={p.slug}

@@ -9,26 +9,55 @@ import {
   Wrench,
   AlertTriangle,
   BookOpen,
+  Loader2,
 } from "lucide-react";
-import { projects } from "@/data/projects";
 import Navbar from "@/components/Navbar";
 import { Helmet } from "react-helmet-async";
 import { useTranslation } from "react-i18next";
+import { useQuery } from "@tanstack/react-query";
+import api from "@/lib/api";
 
 const ProjectDetail = () => {
   const { slug, locale } = useParams<{ slug: string; locale: string }>();
   const { t } = useTranslation();
-  const project = projects.find((p) => p.slug === slug);
   const loc = locale ?? "en";
 
-  const projectTitle = slug ? t(`projects.items.${slug}.title`) : "";
-  const projectDescription = slug ? t(`projects.items.${slug}.description`) : "";
-  const projectLongDescription = slug ? t(`projects.items.${slug}.longDescription`) : "";
+  const { data: allProjects, isLoading } = useQuery({
+    queryKey: ["projects"],
+    queryFn: async () => {
+      const { data } = await api.get("/portfolio/projects");
+      return data;
+    },
+  });
+
+  const project = allProjects?.find((p: any) => p.slug === slug);
+
+  // For projects from the DB, use DB fields. For legacy static projects, fallback to i18n.
+  const projectTitle = project
+    ? ((loc === "ar" && project.titleAr) ? project.titleAr : project.title || t(`projects.items.${slug}.title`, { defaultValue: project.slug }))
+    : (slug ? t(`projects.items.${slug}.title`, { defaultValue: slug ?? "" }) : "");
+
+  const projectDescription = project
+    ? ((loc === "ar" && project.descriptionAr) ? project.descriptionAr : project.description || t(`projects.items.${slug}.description`, { defaultValue: "" }))
+    : (slug ? t(`projects.items.${slug}.description`, { defaultValue: "" }) : "");
+
+  const projectLongDescription = slug ? t(`projects.items.${slug}.longDescription`, { defaultValue: projectDescription }) : "";
   const projectFeatures = slug
     ? (t(`projects.items.${slug}.features`, { returnObjects: true }) as string[])
     : [];
-  const projectChallenges = slug ? t(`projects.items.${slug}.challenges`) : "";
-  const projectTechDetails = slug ? t(`projects.items.${slug}.techDetails`) : "";
+  const projectChallenges = slug ? t(`projects.items.${slug}.challenges`, { defaultValue: "" }) : "";
+  const projectTechDetails = slug ? t(`projects.items.${slug}.techDetails`, { defaultValue: "" }) : "";
+
+  if (isLoading) {
+    return (
+      <main className="min-h-screen bg-[#020617]">
+        <Navbar />
+        <div className="flex min-h-screen items-center justify-center pt-20">
+          <Loader2 className="h-10 w-10 animate-spin text-cyan-400" />
+        </div>
+      </main>
+    );
+  }
 
   if (!project) {
     return (

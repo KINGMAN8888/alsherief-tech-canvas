@@ -8,6 +8,8 @@ import api from "@/lib/api";
 interface Project {
     id?: string;
     slug: string;
+    title?: string;
+    description?: string;
     emoji: string;
     tech: string[];
     link?: string;
@@ -16,7 +18,7 @@ interface Project {
     color: string;
 }
 
-const emptyProject: Partial<Project> = { slug: "", emoji: "", tech: [], link: "", github: "", image: "", color: "" };
+const emptyProject: Partial<Project> = { slug: "", title: "", description: "", emoji: "", tech: [], link: "", github: "", image: "", color: "" };
 
 const AdminProjects = () => {
     const { data: projects, isLoading } = useApiQuery<Project>("projects");
@@ -50,6 +52,8 @@ const AdminProjects = () => {
             setCurrent(prev => ({
                 ...prev,
                 slug: data.name,
+                title: data.name,
+                description: data.description || prev.description || "",
                 github: data.html_url,
                 link: data.homepage || "",
                 image: `https://opengraph.githubassets.com/1/${data.owner}/${data.repo}`,
@@ -221,6 +225,14 @@ const AdminProjects = () => {
                             <div>
                                 <label className="admin-label">Slug (unique ID)</label>
                                 <input required type="text" value={current.slug || ""} onChange={e => setCurrent({ ...current, slug: e.target.value })} className="admin-input" placeholder="e.g. my-cool-project" />
+                            </div>
+                            <div>
+                                <label className="admin-label">Title (optional)</label>
+                                <input type="text" value={current.title || ""} onChange={e => setCurrent({ ...current, title: e.target.value })} className="admin-input" placeholder="e.g. My Awesome Project" />
+                            </div>
+                            <div>
+                                <label className="admin-label">Description</label>
+                                <textarea rows={3} value={current.description || ""} onChange={e => setCurrent({ ...current, description: e.target.value })} className="admin-input resize-none" placeholder="Short description of the project..." />
                             </div>
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
