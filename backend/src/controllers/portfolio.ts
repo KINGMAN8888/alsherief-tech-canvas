@@ -52,50 +52,50 @@ export const createMessage = async (req: Request, res: Response, next: NextFunct
 
 const handleCreate =
     (model: any, cacheKey?: string) =>
-    async (req: Request, res: Response, next: NextFunction) => {
-        try {
-            const item = await model.create({ data: req.body });
-            if (cacheKey) cache.del(cacheKey);
-            res.status(201).json(item);
-        } catch (err) { next(err); }
-    };
+        async (req: Request, res: Response, next: NextFunction) => {
+            try {
+                const item = await model.create({ data: req.body });
+                if (cacheKey) cache.del(cacheKey);
+                res.status(201).json(item);
+            } catch (err) { next(err); }
+        };
 
 const handleUpdate =
     (model: any, cacheKey?: string) =>
-    async (req: Request, res: Response, next: NextFunction) => {
-        try {
-            const item = await model.update({ where: { id: req.params.id }, data: req.body });
-            if (cacheKey) cache.del(cacheKey);
-            res.json(item);
-        } catch (err) { next(err); }
-    };
+        async (req: Request, res: Response, next: NextFunction) => {
+            try {
+                const item = await model.update({ where: { id: req.params.id }, data: req.body });
+                if (cacheKey) cache.del(cacheKey);
+                res.json(item);
+            } catch (err) { next(err); }
+        };
 
 const handleDelete =
     (model: any, cacheKey?: string) =>
-    async (req: Request, res: Response, next: NextFunction) => {
-        try {
-            await model.delete({ where: { id: req.params.id } });
-            if (cacheKey) cache.del(cacheKey);
-            res.json({ success: true });
-        } catch (err) { next(err); }
-    };
+        async (req: Request, res: Response, next: NextFunction) => {
+            try {
+                await model.delete({ where: { id: req.params.id } });
+                if (cacheKey) cache.del(cacheKey);
+                res.json({ success: true });
+            } catch (err) { next(err); }
+        };
 
 // ── Admin Controllers ─────────────────────────────────────────────────────────
 
-export const createProject       = handleCreate(prisma.project,       CACHE_KEYS.projects);
-export const updateProject       = handleUpdate(prisma.project,       CACHE_KEYS.projects);
-export const deleteProject       = handleDelete(prisma.project,       CACHE_KEYS.projects);
+export const createProject = handleCreate(prisma.project, CACHE_KEYS.projects);
+export const updateProject = handleUpdate(prisma.project, CACHE_KEYS.projects);
+export const deleteProject = handleDelete(prisma.project, CACHE_KEYS.projects);
 
-export const createSkill         = handleCreate(prisma.skill,         CACHE_KEYS.skills);
-export const updateSkill         = handleUpdate(prisma.skill,         CACHE_KEYS.skills);
-export const deleteSkill         = handleDelete(prisma.skill,         CACHE_KEYS.skills);
+export const createSkill = handleCreate(prisma.skill, CACHE_KEYS.skills);
+export const updateSkill = handleUpdate(prisma.skill, CACHE_KEYS.skills);
+export const deleteSkill = handleDelete(prisma.skill, CACHE_KEYS.skills);
 
 export const createCertification = handleCreate(prisma.certification, CACHE_KEYS.certifications);
 export const updateCertification = handleUpdate(prisma.certification, CACHE_KEYS.certifications);
 export const deleteCertification = handleDelete(prisma.certification, CACHE_KEYS.certifications);
 
-export const updateMessage       = handleUpdate(prisma.contactMessage);
-export const deleteMessage       = handleDelete(prisma.contactMessage);
+export const updateMessage = handleUpdate(prisma.contactMessage);
+export const deleteMessage = handleDelete(prisma.contactMessage);
 
 // Profile (upsert — single record id="main") ──────────────────────────────────
 export const updateProfile = async (req: Request, res: Response, next: NextFunction) => {
@@ -137,3 +137,53 @@ export const getBlogPostsAdmin = async (req: Request, res: Response, next: NextF
 export const createBlogPost = handleCreate(prisma.blogPost, CACHE_KEYS.blog);
 export const updateBlogPost = handleUpdate(prisma.blogPost, CACHE_KEYS.blog);
 export const deleteBlogPost = handleDelete(prisma.blogPost, CACHE_KEYS.blog);
+
+// GitHub Fetcher ───────────────────────────────────────────────────────────────
+
+export const fetchGithubRepo = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { url } = req.body;
+        if (!url) {
+            res.status(400).json({ error: 'GitHub URL is required' });
+            return;
+        }
+
+        const match = url.match(/github\.com\/([^/]+)\/([^/\s?#]+)/);
+        if (!match) {
+            res.status(400).json({ error: 'Invalid GitHub URL format' });
+            return;
+        }
+
+        const [, owner, repo] = match;
+        const fetchOptions: RequestInit = {
+            headers: { Accept: "application/vnd.github+json" },
+        };
+
+        // Use token if available to access private repos
+        if (process.env.GITHUB_TOKEN) {
+            fetchOptions.headers = {
+                ...fetchOptions.headers,
+                Authorization: `Bearer ${process.env.GITHUB_TOKEN}`
+            };
+        }
+
+        const response = await fetch(`https://api.github.com/repos/${owner}/${repo}`, fetchOptions);
+
+        if (!response.ok) {
+            res.status(response.status).json({ error: 'Failed to fetch repository. May be private without a token.' });
+            return;
+        }
+
+        const data = await response.json();
+        res.json({
+            name: data.name,
+            html_url: data.html_url,
+            homepage: data.homepage,
+            owner: owner,
+            repo: repo,
+            topics: data.topics || [],
+            language: data.language
+        });
+    } catch (error) { next(error); }
+};
+

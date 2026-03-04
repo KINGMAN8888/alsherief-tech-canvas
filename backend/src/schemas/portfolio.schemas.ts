@@ -64,6 +64,12 @@ export const createCertificationSchema = z.object({
 
 export const updateCertificationSchema = createCertificationSchema.partial();
 
+// ─── GitHub Fetch ──────────────────────────────────────────────────────────────
+
+export const githubFetchSchema = z.object({
+    url: z.string({ error: 'URL is required' }).url('Invalid URL'),
+});
+
 // ─── Blog Post ────────────────────────────────────────────────────────────────
 
 export const createBlogPostSchema = z.object({

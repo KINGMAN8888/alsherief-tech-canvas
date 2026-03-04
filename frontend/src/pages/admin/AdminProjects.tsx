@@ -3,6 +3,7 @@ import { useApiQuery, useApiAdd, useApiUpdate, useApiDelete } from "@/hooks/useA
 import { Plus, Edit2, Trash2, ExternalLink, Github, FolderGit2, X, Save, Upload, Loader2, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 import { uploadMediaFile } from "@/lib/mediaUpload";
+import api from "@/lib/api";
 
 interface Project {
     id?: string;
@@ -34,16 +35,10 @@ const AdminProjects = () => {
     const closeDrawer = () => { setDrawerOpen(false); setCurrent(emptyProject); setGithubUrl(""); };
 
     const fetchFromGitHub = async () => {
-        const match = githubUrl.match(/github\.com\/([^/]+)\/([^/\s?#]+)/);
-        if (!match) { toast.error("Invalid GitHub URL"); return; }
-        const [, owner, repo] = match;
+        if (!githubUrl.trim()) return;
         setIsFetchingGithub(true);
         try {
-            const res = await fetch(`https://api.github.com/repos/${owner}/${repo}`, {
-                headers: { Accept: "application/vnd.github+json" },
-            });
-            if (!res.ok) throw new Error("Not found");
-            const data = await res.json();
+            const { data } = await api.post('/portfolio/github/fetch', { url: githubUrl });
 
             const tech: string[] = [];
             if (data.topics && data.topics.length > 0) {
@@ -57,14 +52,14 @@ const AdminProjects = () => {
                 slug: data.name,
                 github: data.html_url,
                 link: data.homepage || "",
-                image: `https://opengraph.githubassets.com/1/${owner}/${repo}`,
+                image: `https://opengraph.githubassets.com/1/${data.owner}/${data.repo}`,
                 tech,
                 emoji: prev.emoji || "💻",
                 color: prev.color || "from-slate-700 to-slate-900",
             }));
             toast.success("GitHub data fetched! Review and save.");
-        } catch {
-            toast.error("Failed to fetch. Make sure the repository is public.");
+        } catch (error: any) {
+            toast.error(error.response?.data?.error || "Failed to fetch repository. Ensure it's valid.");
         } finally {
             setIsFetchingGithub(false);
         }
