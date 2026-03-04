@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useApiQuery, useApiAdd, useApiUpdate, useApiDelete } from "@/hooks/useApiHooks";
-import { Plus, Edit2, Trash2, ExternalLink, Github, FolderGit2, X, Save, Upload, Loader2, Sparkles } from "lucide-react";
+import { Plus, Edit2, Trash2, ExternalLink, Github, FolderGit2, X, Save, Upload, Loader2, Sparkles, RefreshCw } from "lucide-react";
 import { toast } from "sonner";
 import { uploadMediaFile } from "@/lib/mediaUpload";
 import api from "@/lib/api";
@@ -38,6 +38,34 @@ const AdminProjects = () => {
     const [isUploadingImage, setIsUploadingImage] = useState(false);
     const [githubUrl, setGithubUrl] = useState("");
     const [isFetchingGithub, setIsFetchingGithub] = useState(false);
+    const [syncingId, setSyncingId] = useState<string | null>(null);
+
+    // Quick sync: re-fetch README + metadata for an existing project without opening drawer
+    const syncReadme = async (project: Project) => {
+        const ghUrl = project.github;
+        if (!ghUrl) { toast.error("No GitHub URL saved for this project"); return; }
+        setSyncingId(project.id!);
+        try {
+            const { data } = await api.post('/portfolio/github/fetch', { url: ghUrl });
+            await updateProject.mutateAsync({
+                id: project.id!,
+                data: {
+                    readmeRaw: data.readmeRaw,
+                    sections: data.sections,
+                    features: data.features,
+                    challenges: data.challenges,
+                    techDetails: data.techDetails,
+                    longDescription: data.longDescription,
+                    stars: data.stars,
+                    forks: data.forks,
+                    language: data.language,
+                    tech: Array.isArray(data.tech) && data.tech.length > 0 ? data.tech : project.tech,
+                },
+            });
+            toast.success(`README synced for "${project.slug}"`);
+        } catch { toast.error("Failed to sync README from GitHub"); }
+        finally { setSyncingId(null); }
+    };
 
     const openNew = () => { setCurrent(emptyProject); setGithubUrl(""); setDrawerOpen(true); };
     const openEdit = (p: Project) => { setCurrent(p); setGithubUrl(""); setDrawerOpen(true); };
@@ -187,6 +215,17 @@ const AdminProjects = () => {
                                         {project.github && <a href={project.github} target="_blank" rel="noreferrer" className="admin-btn-icon" title="GitHub"><Github size={13} /></a>}
                                     </div>
                                     <div className="flex gap-1.5">
+                                        <button
+                                            onClick={() => syncReadme(project)}
+                                            disabled={syncingId === project.id}
+                                            title="Sync README from GitHub"
+                                            aria-label="Sync README from GitHub"
+                                            className="admin-btn-icon"
+                                        >
+                                            {syncingId === project.id
+                                                ? <Loader2 size={13} className="animate-spin" />
+                                                : <RefreshCw size={13} />}
+                                        </button>
                                         <button onClick={() => openEdit(project)} title="Edit project" aria-label="Edit project" className="admin-btn-icon edit"><Edit2 size={13} /></button>
                                         <button onClick={() => handleDelete(project.id!, project.slug)} title="Delete project" aria-label="Delete project" className="admin-btn-icon danger"><Trash2 size={13} /></button>
                                     </div>
@@ -233,7 +272,7 @@ const AdminProjects = () => {
                                         }
                                     </button>
                                 </div>
-                                <p className="text-[11px] text-slate-500 mt-2">Paste a public repo URL to auto-fill slug, tech stack, links, and preview image.</p>
+                                <p className="text-[11px] text-slate-500 mt-2">Paste a GitHub repo URL to auto-fill all fields including README content, features, tech stack, and preview image.</p>
                             </div>
 
                             <div>

@@ -204,7 +204,7 @@ export const fetchGithubRepo = async (req: Request, res: Response, next: NextFun
             features: parsedReadme.features,
             challenges: parsedReadme.challenges,
             techDetails: parsedReadme.techDetails,
-            readmeRaw: readmeMarkdown.slice(0, 5000),
+            readmeRaw: readmeMarkdown.slice(0, 50000),
             // Tech
             tech: techStack,
             language: repoData.language || '',
