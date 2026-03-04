@@ -331,6 +331,11 @@ const AdminProjects = () => {
                                     <input type="text" value={current.github || ""} onChange={e => setCurrent({ ...current, github: e.target.value })} className="admin-input" placeholder="https://github.com/..." />
                                 </div>
                             </div>
+                            <div>
+                                <label className="admin-label text-cyan-400">README Content (Markdown)</label>
+                                <textarea rows={10} value={current.readmeRaw || ""} onChange={e => setCurrent({ ...current, readmeRaw: e.target.value })} className="admin-input resize-y font-mono text-xs bg-[#0d1117] text-slate-300 border-cyan-500/20" placeholder="# Project Title&#10;Write markdown here..." />
+                                <p className="text-[11px] text-slate-500 mt-1">This content is rendered directly on the project detail page. You can edit, remove, or write new Markdown content here.</p>
+                            </div>
                             <div className="flex gap-3 pt-4 border-t border-slate-700/40">
                                 <button type="button" onClick={closeDrawer} className="admin-btn-ghost flex-1">Cancel</button>
                                 <button type="submit" disabled={addProject.isPending || updateProject.isPending} className="admin-btn-primary flex-1 justify-center">
