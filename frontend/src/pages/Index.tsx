@@ -91,15 +91,24 @@ const Index = () => {
       <Navbar />
       <Hero />
       <About />
-      <Services />
-      <Experience />
-      <Projects />
-      <Education />
-      <Certifications />
-      <Skills />
-      <Blog />
-      <Contact />
-      <Footer />
+
+      {/* ── BELOW THE FOLD LAZY LOADED COMPONENTS ── */}
+      {/* 
+        CRITICAL: We MUST wrap these in a local Suspense boundary. 
+        Otherwise, React will suspend the ENTIRE Index page (including Hero/Navbar) 
+        until all these bottom chunks finish downloading, destroying FCP.
+      */}
+      <React.Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="w-8 h-8 rounded-full border-t-2 border-cyan-500 animate-spin" /></div>}>
+        <Services />
+        <Experience />
+        <Projects />
+        <Education />
+        <Certifications />
+        <Skills />
+        <Blog />
+        <Contact />
+        <Footer />
+      </React.Suspense>
     </main>
   );
 };
