@@ -14,6 +14,8 @@ interface Project {
     features?: string[];
     challenges?: string;
     techDetails?: string;
+    readmeRaw?: string;
+    sections?: unknown[];
     language?: string;
     stars?: number;
     forks?: number;
@@ -96,6 +98,8 @@ const AdminProjects = () => {
                 language: data.language || "",
                 stars: data.stars || 0,
                 forks: data.forks || 0,
+                readmeRaw: data.readmeRaw || "",
+                sections: Array.isArray(data.sections) ? data.sections : [],
                 github: data.html_url,
                 link: data.homepage || "",
                 image: data.image || `https://opengraph.githubassets.com/1/${data.owner}/${data.repo}`,
