@@ -42,9 +42,10 @@ const ProjectDetail = () => {
     : (slug ? t(`projects.items.${slug}.description`, { defaultValue: "" }) : "");
 
   const projectLongDescription = slug ? t(`projects.items.${slug}.longDescription`, { defaultValue: projectDescription }) : "";
-  const projectFeatures = slug
-    ? (t(`projects.items.${slug}.features`, { returnObjects: true }) as string[])
+  const rawFeatures = slug
+    ? t(`projects.items.${slug}.features`, { returnObjects: true, defaultValue: [] })
     : [];
+  const projectFeatures: string[] = Array.isArray(rawFeatures) ? rawFeatures : [];
   const projectChallenges = slug ? t(`projects.items.${slug}.challenges`, { defaultValue: "" }) : "";
   const projectTechDetails = slug ? t(`projects.items.${slug}.techDetails`, { defaultValue: "" }) : "";
 
