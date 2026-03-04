@@ -50,8 +50,8 @@ const Navbar = () => {
       cachedTotal = document.documentElement.scrollHeight - window.innerHeight;
     };
 
-    // Calculate initially
-    updateTotal();
+    // Calculate after first paint to avoid forced reflow at mount
+    requestAnimationFrame(updateTotal);
 
     // Use ResizeObserver instead of arbitrary timeouts/resizes to safely refresh document height caching
     let resizeObserver: ResizeObserver | null = null;
@@ -104,11 +104,17 @@ const Navbar = () => {
 
     observeSections();
 
-    // Re-observe later to catch lazily loaded (Suspense) sections
-    const mutObserver = new MutationObserver(() => observeSections());
+    // Re-observe later to catch lazily loaded (Suspense) sections.
+    // Debounced to avoid calling observeSections() on every React batch DOM update.
+    let mutTimer: ReturnType<typeof setTimeout>;
+    const mutObserver = new MutationObserver(() => {
+      clearTimeout(mutTimer);
+      mutTimer = setTimeout(observeSections, 300);
+    });
     mutObserver.observe(document.body, { childList: true, subtree: true });
 
     return () => {
+      clearTimeout(mutTimer);
       observer.disconnect();
       mutObserver.disconnect();
     };
