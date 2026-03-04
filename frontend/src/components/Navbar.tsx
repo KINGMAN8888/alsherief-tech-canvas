@@ -41,41 +41,62 @@ const Navbar = () => {
   const displayRole = profile?.headline || t("nav.role");
 
 
-  /* ── Scroll state + progress ── */
+  /* ── Optimized Scroll & Active Section (Prevents Forced Reflows) ── */
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 40);
-      const total =
-        document.documentElement.scrollHeight - window.innerHeight;
-      const pct = total > 0 ? (window.scrollY / total) * 100 : 0;
-      setScrollProgress(pct);
-      // expose progress as a CSS variable so we can avoid inline width styles
-      document.documentElement.style.setProperty("--scroll-progress", `${pct}%`);
-    };
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  /* ── Active section via scroll position ── */
-  useEffect(() => {
+    let ticking = false;
+    let cachedTotal = 0;
+    let cachedOffsets: { id: string; top: number }[] = [];
     const ids = navLinks.map((l) => l.href.replace("#", ""));
 
-    const updateActive = () => {
-      const trigger = window.scrollY + window.innerHeight * 0.35;
-      let current = "";
-
-      for (const id of ids) {
+    const updateCache = () => {
+      cachedTotal = document.documentElement.scrollHeight - window.innerHeight;
+      cachedOffsets = ids.map(id => {
         const el = document.getElementById(id);
-        if (el && el.offsetTop <= trigger) {
-          current = id;
-        }
-      }
-      setActiveSection(current);
+        // Fallback to 0 if not mounted yet (lazy loaded sections)
+        return { id, top: el ? el.offsetTop : Infinity };
+      });
     };
 
-    updateActive();
-    window.addEventListener("scroll", updateActive, { passive: true });
-    return () => window.removeEventListener("scroll", updateActive);
+    // Calculate cache initially, and re-calculate occasionally string lazy load completion
+    updateCache();
+    const timer1 = setTimeout(updateCache, 1500);
+    const timer2 = setTimeout(updateCache, 5000);
+    window.addEventListener("resize", updateCache, { passive: true });
+
+    const handleScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const scrollY = window.scrollY;
+
+          // 1. Update overall scroll appearance and progress
+          setScrolled(scrollY > 40);
+          const pct = cachedTotal > 0 ? (scrollY / cachedTotal) * 100 : 0;
+          setScrollProgress(pct);
+          document.documentElement.style.setProperty("--scroll-progress", `${pct}%`);
+
+          // 2. Update active section
+          const trigger = scrollY + window.innerHeight * 0.35;
+          let current = "";
+          for (const item of cachedOffsets) {
+            if (item.top !== Infinity && item.top <= trigger) {
+              current = item.id;
+            }
+          }
+          setActiveSection(current);
+
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", updateCache);
+      clearTimeout(timer1);
+      clearTimeout(timer2);
+    };
   }, []);
 
   /* ── Lock body scroll when mobile menu open ── */
@@ -117,8 +138,8 @@ const Navbar = () => {
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled
-            ? "bg-[#020810]/90 backdrop-blur-xl border-b border-slate-800/60 shadow-[0_4px_32px_rgba(0,0,0,0.5)]"
-            : "bg-transparent"
+          ? "bg-[#020810]/90 backdrop-blur-xl border-b border-slate-800/60 shadow-[0_4px_32px_rgba(0,0,0,0.5)]"
+          : "bg-transparent"
           }`}
       >
         {/* Scroll progress bar */}
@@ -153,8 +174,8 @@ const Navbar = () => {
                 key={l.href}
                 href={getHref(l.href)}
                 className={`relative px-3 py-1.5 font-rajdhani text-sm font-semibold tracking-wide transition-colors duration-200 rounded-lg ${isActive(l.href)
-                    ? "text-cyan-400"
-                    : "text-slate-400 hover:text-white hover:bg-slate-800/40"
+                  ? "text-cyan-400"
+                  : "text-slate-400 hover:text-white hover:bg-slate-800/40"
                   }`}
               >
                 {isActive(l.href) && (
@@ -199,8 +220,8 @@ const Navbar = () => {
                         key={lang.code}
                         onClick={() => switchLocale(lang.code)}
                         className={`w-full flex items-center gap-2.5 px-3 py-2.5 font-rajdhani text-sm font-semibold transition-colors duration-150 ${locale === lang.code
-                            ? "text-cyan-400 bg-cyan-500/10"
-                            : "text-slate-300 hover:text-white hover:bg-slate-800/60"
+                          ? "text-cyan-400 bg-cyan-500/10"
+                          : "text-slate-300 hover:text-white hover:bg-slate-800/60"
                           }`}
                       >
                         <span>{lang.flag}</span>
@@ -288,8 +309,8 @@ const Navbar = () => {
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: i * 0.04, duration: 0.3 }}
                       className={`flex items-center justify-between rounded-xl px-4 py-3 font-rajdhani text-base font-semibold tracking-wide transition-all duration-200 ${isActive(l.href)
-                          ? "bg-cyan-500/10 border border-cyan-500/20 text-cyan-400"
-                          : "text-slate-400 hover:bg-slate-800/60 hover:text-white"
+                        ? "bg-cyan-500/10 border border-cyan-500/20 text-cyan-400"
+                        : "text-slate-400 hover:bg-slate-800/60 hover:text-white"
                         }`}
                     >
                       <span>{t(`nav.${l.key}`)}</span>
@@ -310,8 +331,8 @@ const Navbar = () => {
                         key={lang.code}
                         onClick={() => switchLocale(lang.code)}
                         className={`flex-1 flex items-center justify-center gap-1.5 rounded-lg border py-2 font-rajdhani text-xs font-bold transition-all duration-150 ${locale === lang.code
-                            ? "border-cyan-500/30 bg-cyan-500/10 text-cyan-400"
-                            : "border-slate-700/60 text-slate-400 hover:border-slate-600 hover:text-white"
+                          ? "border-cyan-500/30 bg-cyan-500/10 text-cyan-400"
+                          : "border-slate-700/60 text-slate-400 hover:border-slate-600 hover:text-white"
                           }`}
                       >
                         <span>{lang.flag}</span>
